@@ -215,6 +215,7 @@ public class Assembler {
 			return "";
 		}
 	}
+
 	private String encode_cc(String s_cc) {
 		int cc = Integer.parseInt(s_cc);
 		if (cc == 0) {
@@ -285,93 +286,150 @@ public class Assembler {
 		if (operation.equals("LDR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("LDA")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("LDX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
 		} else if (operation.equals("STR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("STX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("JZ")) {
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("JZ")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JNE")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JNE")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JCC")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JCC")) {
 			bin.append(encode_cc(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JMA")) {//CHECK
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JMA")) {// CHECK
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("JSR")) {//CHECK
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("JSR")) {// CHECK
 			bin.append("00");
-			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("RFS")) {//CHECK
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("RFS")) {// CHECK
 			bin.append("00000");
 			bin.append(hexToBin(splitted[0]));
-		}
-		else if (operation.equals("SOB")) {
+		} else if (operation.equals("SOB")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JGE")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JGE")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("AMR")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("AMR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("SMR")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("SMR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[1]));
-		}
-		else if (operation.equals("AIR")) {//CHECK
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("AIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
 			bin.append(hexToBin(splitted[1]));
-		}
-		else if (operation.equals("SIR")) {//CHECK
+		} else if (operation.equals("SIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
 			bin.append(hexToBin(splitted[1]));
