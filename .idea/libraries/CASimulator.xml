@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="CASimulator">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CASimulator/dist/CASimulator.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
