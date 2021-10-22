@@ -285,68 +285,28 @@ public class Assembler {
 		if (operation.equals("LDR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-                        if(splitted.length == 4)
-                        {
-                            bin.append(encode_i(splitted[2]));
-                            bin.append(encode_address(splitted[3]));
-                        }
-                        else
-                        {
-                            bin.append("0");
-                            bin.append(encode_address(splitted[2]));
-                        }
+			bin.append(encode_i(splitted[2]));
+			bin.append(encode_address(splitted[3]));
 		} else if (operation.equals("LDA")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			if(splitted.length == 4)
-                        {
-                            bin.append(encode_i(splitted[2]));
-                            bin.append(encode_address(splitted[3]));
-                        }
-                        else
-                        {
-                            bin.append("0");
-                            bin.append(encode_address(splitted[2]));
-                        }
+			bin.append(encode_i(splitted[2]));
+			bin.append(encode_address(splitted[3]));
 		} else if (operation.equals("LDX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			if(splitted.length == 3)
-                        {
-                            bin.append(encode_i(splitted[1]));
-                            bin.append(encode_address(splitted[2]));
-                        }
-                        else
-                        {
-                            bin.append("0");
-                            bin.append(encode_address(splitted[1]));
-                        }
+			bin.append(encode_i(splitted[1]));
+			bin.append(encode_address(splitted[2]));
 		} else if (operation.equals("STR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			if(splitted.length == 4)
-                        {
-                            bin.append(encode_i(splitted[2]));
-                            bin.append(encode_address(splitted[3]));
-                        }
-                        else
-                        {
-                            bin.append("0");
-                            bin.append(encode_address(splitted[2]));
-                        }
+			bin.append(encode_i(splitted[2]));
+			bin.append(encode_address(splitted[3]));
 		} else if (operation.equals("STX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			if(splitted.length == 3)
-                        {
-                            bin.append(encode_i(splitted[1]));
-                            bin.append(encode_address(splitted[2]));
-                        }
-                        else
-                        {
-                            bin.append("0");
-                            bin.append(encode_address(splitted[1]));
-                        }
+			bin.append(encode_i(splitted[1]));
+			bin.append(encode_address(splitted[2]));
 		}
 		else if (operation.equals("JZ")) {
 			bin.append(encode_reg(splitted[0]));
