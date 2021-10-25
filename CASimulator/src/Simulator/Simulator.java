@@ -136,29 +136,6 @@ public class Simulator extends javax.swing.JFrame {
 		case "JZ":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			res = "";
-				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-					res = R0;
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-					res = R1;
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-					res = R2;
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-					res = R3;
-				}
-				mem = Simulator.memory[Integer.parseInt(res)];
-				if (assembler_obj.hexToDec(res) > 4095) {
-					txtarea_instructions.setText("Memory limit exceeded");
-				}
-				else {
-					if (assembler_obj.hexToDec(mem) == 0) {
-						Simulator.PC =assembler_obj.hexToBin16(EA);
-					} else
-						Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-				}
-			break;
-		case "JNE":
-			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			res="";
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				res = R0;
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
@@ -171,8 +148,29 @@ public class Simulator extends javax.swing.JFrame {
 			mem = Simulator.memory[Integer.parseInt(res)];
 			if (assembler_obj.hexToDec(res) > 4095) {
 				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				if (assembler_obj.hexToDec(mem) == 0) {
+					Simulator.PC = assembler_obj.hexToBin16(EA);
+				} else
+					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
 			}
-			else {
+			break;
+		case "JNE":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			res = "";
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				res = R0;
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				res = R1;
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				res = R2;
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				res = R3;
+			}
+			mem = Simulator.memory[Integer.parseInt(res)];
+			if (assembler_obj.hexToDec(res) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
 				if (assembler_obj.hexToDec(mem) != 0) {
 					Simulator.PC = assembler_obj.hexToBin16(EA);
 				} else
@@ -181,74 +179,160 @@ public class Simulator extends javax.swing.JFrame {
 			break;
 		case "JCC":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			res="";
-				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-					res = CC.substring(0, 1);
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-					res = CC.substring(1, 2);
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-					res = CC.substring(2, 3);
-				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-					res = CC.substring(3);
-				}
-				if (Integer.parseInt(res) == 1) {
-					Simulator.PC = assembler_obj.hexToBin16(EA);
-				} else
-					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-			
+			res = "";
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				res = CC.substring(0, 1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				res = CC.substring(1, 2);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				res = CC.substring(2, 3);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				res = CC.substring(3);
+			}
+			if (Integer.parseInt(res) == 1) {
+				Simulator.PC = assembler_obj.hexToBin16(EA);
+			} else
+				Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
+
 			break;
 		case "JMA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-				mem = Simulator.memory[assembler_obj.hexToDec(EA)];
-				res = assembler_obj.hexToBin16(mem);
-				Simulator.PC = assembler_obj.hexToBin16(EA);
+			mem = Simulator.memory[assembler_obj.hexToDec(EA)];
+			res = assembler_obj.hexToBin16(mem);
+			Simulator.PC = assembler_obj.hexToBin16(EA);
 			break;
 		case "JSR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-				res = assembler_obj.hexToBin16(EA);
-				R3 = assembler_obj.addBin(Simulator.PC, "1");
-				Simulator.PC = res;
+			res = assembler_obj.hexToBin16(EA);
+			R3 = assembler_obj.addBin(Simulator.PC, "1");
+			Simulator.PC = res;
 			break;
 		case "RFS":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			R0 = assembler_obj.decToBin(Integer.parseInt(EA));
+			Simulator.PC = assembler_obj.hexToBin16(Simulator.memory[assembler_obj.binToDec(R3)]);
+			break;
+		case "SOB":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			res = "";
+
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				res = Simulator.memory[assembler_obj.binToDec(R0)];
+				R0 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				res = Simulator.memory[assembler_obj.binToDec(R1)];
+				R1 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				res = Simulator.memory[assembler_obj.binToDec(R2)];
+				R2 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				res = Simulator.memory[assembler_obj.binToDec(R3)];
+				R3 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+			}
+
+			if (Integer.parseInt(res) > 0) {
+				Simulator.PC = EA;
+			}
+			break;
+		case "JGE":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			res = "";
+
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				res = Simulator.memory[assembler_obj.binToDec(R0)];
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				res = Simulator.memory[assembler_obj.binToDec(R1)];
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				res = Simulator.memory[assembler_obj.binToDec(R2)];
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				res = Simulator.memory[assembler_obj.binToDec(R3)];
+			}
+
+			if (Integer.parseInt(res) >= 0) {
+				Simulator.PC = EA;
+			}
+			break;
+		case "AMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
 				txtarea_instructions.setText("Memory limit exceeded");
 			} else {
-				mem = Simulator.memory[assembler_obj.hexToDec(R3)];
-				res = assembler_obj.hexToBin16(mem);
-				R0 = assembler_obj.hexToBin16(EA);
-				Simulator.PC = res;
-			}
-			break;
-		case "SOB":
-			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			
 				mem = Simulator.memory[assembler_obj.hexToDec(EA)];
 				res = assembler_obj.hexToBin16(mem);
-
+				int cOfR, cOfEA;
+				cOfEA = Integer.parseInt(res);
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-					res=Simulator.memory[assembler_obj.binToDec(R0)];
-					R0 = assembler_obj.decToBin(Integer.parseInt(res)-1);
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R0)]);
+					R0 = assembler_obj.decToBin(cOfEA + cOfR);
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-					res=Simulator.memory[assembler_obj.binToDec(R0)];
-					R1 = assembler_obj.decToBin(Integer.parseInt(res)-1);
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R1)]);
+					R1 = assembler_obj.decToBin(cOfEA + cOfR);
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-					res = R2;
-					res=Simulator.memory[assembler_obj.hexToDec(res)];
-					R2 = assembler_obj.decToBin(Integer.parseInt(res)-1);
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R2)]);
+					R2 = assembler_obj.decToBin(cOfEA + cOfR);
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-					res = R3;
-					res=Simulator.memory[assembler_obj.hexToDec(res)];
-					R3 = assembler_obj.decToBin(Integer.parseInt(res)-1);
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R3)]);
+					R3 = assembler_obj.decToBin(cOfEA + cOfR);
 				}
-				
-				if (Integer.parseInt(res) != 0) {
-					Simulator.PC = EA;
-				} else
-					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-				if (assembler_obj.hexToDec(EA) > 4095) {
-					txtarea_instructions.setText("Memory limit exceeded");
-				} else {}
+			}
+			break;
+		case "SMR":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				mem = Simulator.memory[assembler_obj.hexToDec(EA)];
+				res = assembler_obj.hexToBin16(mem);
+				int cOfR, cOfEA;
+				cOfEA = Integer.parseInt(res);
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R0)]);
+					R0 = assembler_obj.decToBin(cOfR - cOfEA);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R1)]);
+					R1 = assembler_obj.decToBin(cOfR - cOfEA);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R2)]);
+					R2 = assembler_obj.decToBin(cOfR - cOfEA);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R3)]);
+					R3 = assembler_obj.decToBin(cOfR - cOfEA);
+				}
+			}
+			break;
+		case "AIR":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			int cOfR, immed = Integer.parseInt(EA);
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R0)]);
+				R0 = assembler_obj.decToBin(cOfR + immed);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R1)]);
+				R1 = assembler_obj.decToBin(cOfR + immed);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R2)]);
+				R2 = assembler_obj.decToBin(cOfR + immed);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				cOfR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R3)]);
+				R3 = assembler_obj.decToBin(cOfR + immed);
+			}
+			break;
+		case "SIR":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			int cOR, immed1 = Integer.parseInt(EA);
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				cOR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R0)]);
+				R0 = assembler_obj.decToBin(cOR - immed1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+				cOR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R1)]);
+				R1 = assembler_obj.decToBin(cOR - immed1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+				cOR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R2)]);
+				R2 = assembler_obj.decToBin(cOR - immed1);
+			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+				cOR = Integer.parseInt(Simulator.memory[assembler_obj.binToDec(R3)]);
+				R3 = assembler_obj.decToBin(cOR - immed1);
+			}
 			break;
 		case "LDR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
