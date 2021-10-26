@@ -433,6 +433,112 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			break;
+		case "MLT": //20
+			int rx_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			if(assembler_obj.set_reg_val_MLT(Reg, rx_MLT*ry_MLT))
+			{
+				txtCC.setText(CC);
+			}
+			break;
+		case "DVD": //21
+			int rx_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			if(assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD))
+			{
+				txtCC.setText(CC);
+			}
+			break;
+		case "TRR": //22
+			int rx_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			if (rx_TRR == ry_TRR){
+				CC = "1" + Simulator.CC.substring(1);
+				txtCC.setText(CC);
+			}else{
+				CC = "0" + Simulator.CC.substring(1);
+				txtCC.setText(CC);
+			}
+			break;
+		case "AND": //23
+			String rx_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			String ry_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			char[] rx_AND_ARR = rx_AND.toCharArray();
+			char[] ry_AND_ARR = ry_AND.toCharArray();
+			char[] temp_AND = new char[16];
+			for(int i=0; i<16; i++){
+				if(rx_AND_ARR[i] == '1' & ry_AND_ARR[i] == '1'){
+					temp_AND[i] = '1';
+				}else {
+					temp_AND[i] = '0';
+				}
+			}
+			String result_AND=String.valueOf(temp_AND);
+			if(instruction.substring(6, 8)=="00"){
+				Simulator.R0 = result_AND;
+			}else if(instruction.substring(6, 8)=="01"){
+				Simulator.R1 = result_AND;
+			}else if(instruction.substring(6, 8)=="10"){
+				Simulator.R2 = result_AND;
+			}else if(instruction.substring(6, 8)=="11"){
+				Simulator.R3 = result_AND;
+			}
+			break;
+		case "ORR": //24
+			String rx_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			String ry_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			char[] rx_ORR_ARR = rx_ORR.toCharArray();
+			char[] ry_ORR_ARR = ry_ORR.toCharArray();
+			char[] temp_ORR = new char[16];
+			for(int i=0; i<16; i++){
+				if(rx_ORR_ARR[i] == '1' || ry_ORR_ARR[i] == '1'){
+					temp_ORR[i] = '1';
+				}else {
+					temp_ORR[i] = '0';
+				}
+			}
+			String result_ORR=String.valueOf(temp_ORR);
+			if(instruction.substring(6, 8)=="00"){
+				Simulator.R0 = result_ORR;
+			}else if(instruction.substring(6, 8)=="01"){
+				Simulator.R1 = result_ORR;
+			}else if(instruction.substring(6, 8)=="10"){
+				Simulator.R2 = result_ORR;
+			}else if(instruction.substring(6, 8)=="11"){
+				Simulator.R3 = result_ORR;
+			}
+			break;
+		case "NOT": //25
+			String rx_NOT = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+
+			char[] rx_NOT_ARR = rx_NOT.toCharArray();
+			char[] temp_NOT = new char[16];
+			for(int i=0; i<16; i++){
+				if(rx_NOT_ARR[i] == '1'){
+					temp_NOT[i] = '0';
+				}else {
+					temp_NOT[i] = '1';
+				}
+			}
+			String result_NOT=String.valueOf(temp_NOT);
+			if(instruction.substring(6, 8)=="00"){
+				Simulator.R0 = result_NOT;
+			}else if(instruction.substring(6, 8)=="01"){
+				Simulator.R1 = result_NOT;
+			}else if(instruction.substring(6, 8)=="10"){
+				Simulator.R2 = result_NOT;
+			}else if(instruction.substring(6, 8)=="11"){
+				Simulator.R3 = result_NOT;
+			}
+			break;
+		case "SRC": //31
+			break;
+		case "RRC": //32
+			break;
+		case "IN": //61
+			break;
+		case "OUT": //62
+			break;
 		default:
 			break;
 		}
