@@ -532,6 +532,90 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			break;
 		case "SRC": //31
+			String content = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int AL = Integer.parseInt(instruction.substring(8, 9));
+			int LR = Integer.parseInt(instruction.substring(9, 10));
+			int count = Integer.parseInt(instruction.substring(12, 16));
+			if(count==0){ break; }
+			if(AL==1){
+				//logically
+				if(LR==1){
+					//logically left
+					char[] temp = content.toCharArray();
+					for(int i=0; i<16-count; i++){
+						temp[i] = temp[i+count];
+					}
+					for(int j=16-count; j<8; j++){
+						temp[j] = '0';
+					}
+					if(instruction.substring(6, 8)=="00"){
+						Simulator.R0 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="01"){
+						Simulator.R1 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="10"){
+						Simulator.R2 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="11"){
+						Simulator.R3 = String.valueOf(temp);
+					}
+				}else{
+					//logically right
+					char[] temp = content.toCharArray();
+					for(int i=15; i>=count; i--){
+						temp[i] = temp[i-count];
+					}
+					for(int j=count-1; j>=0; j--){
+						temp[j] = '0';
+					}
+					if(instruction.substring(6, 8)=="00"){
+						Simulator.R0 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="01"){
+						Simulator.R1 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="10"){
+						Simulator.R2 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="11"){
+						Simulator.R3 = String.valueOf(temp);
+					}
+				}
+			}else{
+				//arithetically
+				if(LR==1){
+					//arithetically left
+					char[] temp = content.toCharArray();
+					for(int i=1; i<16-count; i++){
+						temp[i] = temp[i+count];
+					}
+					for(int j=16-count; j<8; j++){
+						temp[j] = '0';
+					}
+					if(instruction.substring(6, 8)=="00"){
+						Simulator.R0 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="01"){
+						Simulator.R1 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="10"){
+						Simulator.R2 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="11"){
+						Simulator.R3 = String.valueOf(temp);
+					}
+				}else{
+					//arithetically right
+					char[] temp = content.toCharArray();
+					for(int i=15; i>=count; i--){
+						temp[i] = temp[i-count];
+					}
+					for(int j=count-1; j>=0; j--){
+						temp[j] = '0';
+					}
+					if(instruction.substring(6, 8)=="00"){
+						Simulator.R0 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="01"){
+						Simulator.R1 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="10"){
+						Simulator.R2 = String.valueOf(temp);
+					}else if(instruction.substring(6, 8)=="11"){
+						Simulator.R3 = String.valueOf(temp);
+					}
+				}
+			}
 			break;
 		case "RRC": //32
 			break;
