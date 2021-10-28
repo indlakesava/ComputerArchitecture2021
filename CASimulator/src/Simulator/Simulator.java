@@ -135,6 +135,9 @@ public class Simulator extends javax.swing.JFrame {
 		switch (ins) {
 		case "JZ":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = "";
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				res = R0;
@@ -154,9 +157,13 @@ public class Simulator extends javax.swing.JFrame {
 				} else
 					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
 			}
+			}
 			break;
 		case "JNE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = "";
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				res = R0;
@@ -176,9 +183,13 @@ public class Simulator extends javax.swing.JFrame {
 				} else
 					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
 			}
+			}
 			break;
 		case "JCC":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceed"); //Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = "";
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				res = CC.substring(0, 1);
@@ -193,29 +204,44 @@ public class Simulator extends javax.swing.JFrame {
 				Simulator.PC = assembler_obj.hexToBin16(EA);
 			} else
 				Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-
+			}
 			break;
 		case "JMA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			mem = Simulator.memory[assembler_obj.hexToDec(EA)];
 			res = assembler_obj.hexToBin16(mem);
 			Simulator.PC = assembler_obj.hexToBin16(EA);
+			}
 			break;
 		case "JSR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = assembler_obj.hexToBin16(EA);
 			R3 = assembler_obj.addBin(Simulator.PC, "1");
 			Simulator.PC = res;
+			}
 			break;
 		case "RFS":
+			String cR3= Simulator.memory[assembler_obj.binToDec(R3)];
+			if (assembler_obj.hexToDec(cR3) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for c(R3) to be assigned to PC
+			} else {
+			Simulator.PC = assembler_obj.hexToBin16(cR3);
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			R0 = assembler_obj.decToBin(Integer.parseInt(EA));
-			Simulator.PC = assembler_obj.hexToBin16(Simulator.memory[assembler_obj.binToDec(R3)]);
+			}
 			break;
 		case "SOB":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = "";
-
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				res = Simulator.memory[assembler_obj.binToDec(R0)];
 				R0 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
@@ -233,9 +259,13 @@ public class Simulator extends javax.swing.JFrame {
 			if (Integer.parseInt(res) > 0) {
 				Simulator.PC = EA;
 			}
+			}
 			break;
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+			} else {
 			res = "";
 
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
@@ -250,6 +280,7 @@ public class Simulator extends javax.swing.JFrame {
 
 			if (Integer.parseInt(res) >= 0) {
 				Simulator.PC = EA;
+			}
 			}
 			break;
 		case "AMR":

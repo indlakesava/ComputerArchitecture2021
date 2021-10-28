@@ -213,6 +213,27 @@ public class Assembler {
 
 		return sb.toString();
 	}
+	
+	public String hexToBin5(String s) {
+		// Converts Hexadecimal value to Binary format
+		// Also appends zeroes to make it 5 bit
+		if (s == null) {
+			return "00000";
+		}
+
+		String bin = new BigInteger(s, 5).toString(2);
+		if (bin.length() == 5) {
+			return bin;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 5 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+
+		return sb.toString();
+	}
 
 	public String binToHex(String s) {
 		// Converts Binary value to Hexadecimal format
@@ -515,7 +536,7 @@ public class Assembler {
 			}
 		} else if (operation.equals("RFS")) {// CHECK
 			bin.append("00000");
-			bin.append(hexToBin(splitted[0]));
+			bin.append(hexToBin5(splitted[0]));
 		} else if (operation.equals("SOB")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
@@ -559,11 +580,11 @@ public class Assembler {
 		} else if (operation.equals("AIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
-			bin.append(hexToBin(splitted[1]));
+			bin.append(hexToBin5(splitted[1]));
 		} else if (operation.equals("SIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
-			bin.append(hexToBin(splitted[1]));
+			bin.append(hexToBin5(splitted[1]));
 		}
 
 		return bin.toString();
