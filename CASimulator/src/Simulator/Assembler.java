@@ -67,34 +67,34 @@ public class Assembler {
 			encoded_opcode = "000111";
 			break;
 		case "MLT":
-			encoded_opcode = "010100"; //20
+			encoded_opcode = "010100"; // 20
 			break;
 		case "DVD":
-			encoded_opcode = "010101"; //21
+			encoded_opcode = "010101"; // 21
 			break;
 		case "TRR":
-			encoded_opcode = "010110"; //22
+			encoded_opcode = "010110"; // 22
 			break;
 		case "AND":
-			encoded_opcode = "010111"; //23
+			encoded_opcode = "010111"; // 23
 			break;
 		case "ORR":
-			encoded_opcode = "011000"; //24
+			encoded_opcode = "011000"; // 24
 			break;
 		case "NOT":
-			encoded_opcode = "011001"; //25
+			encoded_opcode = "011001"; // 25
 			break;
 		case "SRC":
-			encoded_opcode = "011111"; //31
+			encoded_opcode = "011111"; // 31
 			break;
 		case "RRC":
-			encoded_opcode = "100000"; //32
+			encoded_opcode = "100000"; // 32
 			break;
 		case "IN":
-			encoded_opcode = "111101"; //61
+			encoded_opcode = "111101"; // 61
 			break;
 		case "OUT":
-			encoded_opcode = "111110"; //62
+			encoded_opcode = "111110"; // 62
 			break;
 		default:
 			System.out.println("Invalid Instruction");
@@ -157,34 +157,34 @@ public class Assembler {
 		case "000111":
 			decoded_opcode = "SIR";
 			break;
-		case "010100": //20
+		case "010100": // 20
 			decoded_opcode = "MLT";
 			break;
-		case "010101": //21
+		case "010101": // 21
 			decoded_opcode = "DVD";
 			break;
-		case "010110": //22
+		case "010110": // 22
 			decoded_opcode = "TRR";
 			break;
-		case "010111": //23
+		case "010111": // 23
 			decoded_opcode = "AND";
 			break;
-		case "011000": //24
+		case "011000": // 24
 			decoded_opcode = "ORR";
 			break;
-		case "011001": //25
+		case "011001": // 25
 			decoded_opcode = "NOT";
 			break;
-		case "011111": //31
+		case "011111": // 31
 			decoded_opcode = "SRC";
 			break;
-		case "100000": //32
+		case "100000": // 32
 			decoded_opcode = "RRC";
 			break;
-		case "111101": //61
+		case "111101": // 61
 			decoded_opcode = "IN";
 			break;
-		case "111110": //62
+		case "111110": // 62
 			decoded_opcode = "OUT";
 			break;
 		default:
@@ -213,7 +213,7 @@ public class Assembler {
 
 		return sb.toString();
 	}
-	
+
 	public String hexToBin5(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Also appends zeroes to make it 5 bit
@@ -314,36 +314,31 @@ public class Assembler {
 		int overflow = 0;
 		String bin_result = "";
 
-		if(result>65535)
-		{
+		if (result > 65535) {
 			overflow = 1;
 		}
 
 		if (reg == 0) {
-			if (overflow == 0)
-			{
+			if (overflow == 0) {
 				Simulator.R0 = decToBin(result);
 				return false;
 			}
-			if (overflow == 1)
-			{
+			if (overflow == 1) {
 				Simulator.CC = "1" + Simulator.CC.substring(1);
 				bin_result = decToBin(result);
-				Simulator.R1 = bin_result.substring(bin_result.length()-16, 16);
-				Simulator.R0 = bin_result.substring(bin_result.length() ,bin_result.length()-16);
+				Simulator.R1 = bin_result.substring(bin_result.length() - 16, 16);
+				Simulator.R0 = bin_result.substring(bin_result.length(), bin_result.length() - 16);
 				return true;
 			}
 		} else if (reg == 2) {
-			if (overflow == 0)
-			{
+			if (overflow == 0) {
 				Simulator.R2 = decToBin(result);
 				return false;
 			}
-			if (overflow == 1)
-			{
+			if (overflow == 1) {
 				bin_result = decToBin(result);
-				Simulator.R3 = bin_result.substring(bin_result.length()-16, 16);
-				Simulator.R2 = bin_result.substring(bin_result.length() ,bin_result.length()-16);
+				Simulator.R3 = bin_result.substring(bin_result.length() - 16, 16);
+				Simulator.R2 = bin_result.substring(bin_result.length(), bin_result.length() - 16);
 				return true;
 			}
 		}
@@ -353,7 +348,7 @@ public class Assembler {
 	public boolean set_reg_val_DVD(String bin_reg, int rx, int ry) {
 		int reg = Integer.parseInt(bin_reg, 2);
 		int DIVZERO = 0;
-		if(ry == 0){
+		if (ry == 0) {
 			DIVZERO = 1;
 			Simulator.CC = "1" + Simulator.CC.substring(1);
 			return false;

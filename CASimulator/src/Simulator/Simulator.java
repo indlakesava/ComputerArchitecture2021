@@ -136,151 +136,158 @@ public class Simulator extends javax.swing.JFrame {
 		case "JZ":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			res = "";
-			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				res = R0;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-				res = R1;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-				res = R2;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-				res = R3;
-			}
-			mem = Simulator.memory[Integer.parseInt(res)];
-			if (assembler_obj.hexToDec(res) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");
-			} else {
-				if (assembler_obj.hexToDec(mem) == 0) {
-					Simulator.PC = assembler_obj.hexToBin16(EA);
-				} else
-					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-			}
+				res = "";
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					res = R0;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					res = R1;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					res = R2;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					res = R3;
+				}
+				mem = Simulator.memory[Integer.parseInt(res)];
+				if (assembler_obj.hexToDec(res) > 4095) {
+					txtarea_instructions.setText("Memory limit exceeded");
+				} else {
+					if (assembler_obj.hexToDec(mem) == 0) {
+						Simulator.PC = assembler_obj.hexToBin16(EA);
+					} else
+						Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
+				}
 			}
 			break;
 		case "JNE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			res = "";
-			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				res = R0;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-				res = R1;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-				res = R2;
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-				res = R3;
-			}
-			mem = Simulator.memory[Integer.parseInt(res)];
-			if (assembler_obj.hexToDec(res) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");
-			} else {
-				if (assembler_obj.hexToDec(mem) != 0) {
-					Simulator.PC = assembler_obj.hexToBin16(EA);
-				} else
-					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
-			}
+				res = "";
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					res = R0;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					res = R1;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					res = R2;
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					res = R3;
+				}
+				mem = Simulator.memory[Integer.parseInt(res)];
+				if (assembler_obj.hexToDec(res) > 4095) {
+					txtarea_instructions.setText("Memory limit exceeded");
+				} else {
+					if (assembler_obj.hexToDec(mem) != 0) {
+						Simulator.PC = assembler_obj.hexToBin16(EA);
+					} else
+						Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
+				}
 			}
 			break;
 		case "JCC":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceed"); //Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceed"); // Memory limit exceeds for EA to be assigned to PC
 			} else {
-			res = "";
-			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				res = CC.substring(0, 1);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-				res = CC.substring(1, 2);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-				res = CC.substring(2, 3);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-				res = CC.substring(3);
-			}
-			if (Integer.parseInt(res) == 1) {
-				Simulator.PC = assembler_obj.hexToBin16(EA);
-			} else
-				Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
+				res = "";
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					res = CC.substring(0, 1);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					res = CC.substring(1, 2);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					res = CC.substring(2, 3);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					res = CC.substring(3);
+				}
+				if (Integer.parseInt(res) == 1) {
+					Simulator.PC = assembler_obj.hexToBin16(EA);
+				} else
+					Simulator.PC = assembler_obj.addBin(Simulator.PC, "1");
 			}
 			break;
 		case "JMA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			mem = Simulator.memory[assembler_obj.hexToDec(EA)];
-			res = assembler_obj.hexToBin16(mem);
-			Simulator.PC = assembler_obj.hexToBin16(EA);
+				mem = Simulator.memory[assembler_obj.hexToDec(EA)];
+				res = assembler_obj.hexToBin16(mem);
+				Simulator.PC = assembler_obj.hexToBin16(EA);
 			}
 			break;
 		case "JSR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			res = assembler_obj.hexToBin16(EA);
-			R3 = assembler_obj.addBin(Simulator.PC, "1");
-			Simulator.PC = res;
+				res = assembler_obj.hexToBin16(EA);
+				R3 = assembler_obj.addBin(Simulator.PC, "1");
+				Simulator.PC = res;
 			}
 			break;
 		case "RFS":
-			String cR3= Simulator.memory[assembler_obj.binToDec(R3)];
+			String cR3 = Simulator.memory[assembler_obj.binToDec(R3)];
 			if (assembler_obj.hexToDec(cR3) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for c(R3) to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for c(R3) to be assigned
+																		// to PC
 			} else {
-			Simulator.PC = assembler_obj.hexToBin16(cR3);
-			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			R0 = assembler_obj.decToBin(Integer.parseInt(EA));
+				Simulator.PC = assembler_obj.hexToBin16(cR3);
+				EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+				R0 = assembler_obj.decToBin(Integer.parseInt(EA));
 			}
 			break;
 		case "SOB":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			res = "";
-			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				res = Simulator.memory[assembler_obj.binToDec(R0)];
-				R0 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-				res = Simulator.memory[assembler_obj.binToDec(R1)];
-				R1 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-				res = Simulator.memory[assembler_obj.binToDec(R2)];
-				R2 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-				res = Simulator.memory[assembler_obj.binToDec(R3)];
-				R3 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
-			}
+				res = "";
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					res = Simulator.memory[assembler_obj.binToDec(R0)];
+					R0 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					res = Simulator.memory[assembler_obj.binToDec(R1)];
+					R1 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					res = Simulator.memory[assembler_obj.binToDec(R2)];
+					R2 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					res = Simulator.memory[assembler_obj.binToDec(R3)];
+					R3 = assembler_obj.decToBin(Integer.parseInt(res) - 1);
+				}
 
-			if (Integer.parseInt(res) > 0) {
-				Simulator.PC = EA;
-			}
+				if (Integer.parseInt(res) > 0) {
+					Simulator.PC = EA;
+				}
 			}
 			break;
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
-				txtarea_instructions.setText("Memory limit exceeded");//Memory limit exceeds for EA to be assigned to PC
+				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
+																		// PC
 			} else {
-			res = "";
+				res = "";
 
-			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				res = Simulator.memory[assembler_obj.binToDec(R0)];
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
-				res = Simulator.memory[assembler_obj.binToDec(R1)];
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
-				res = Simulator.memory[assembler_obj.binToDec(R2)];
-			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
-				res = Simulator.memory[assembler_obj.binToDec(R3)];
-			}
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					res = Simulator.memory[assembler_obj.binToDec(R0)];
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					res = Simulator.memory[assembler_obj.binToDec(R1)];
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					res = Simulator.memory[assembler_obj.binToDec(R2)];
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					res = Simulator.memory[assembler_obj.binToDec(R3)];
+				}
 
-			if (Integer.parseInt(res) >= 0) {
-				Simulator.PC = EA;
-			}
+				if (Integer.parseInt(res) >= 0) {
+					Simulator.PC = EA;
+				}
 			}
 			break;
 		case "AMR":
@@ -464,195 +471,195 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			break;
-		case "MLT": //20
+		case "MLT": // 20
 			int rx_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if(assembler_obj.set_reg_val_MLT(Reg, rx_MLT*ry_MLT))
-			{
+			if (assembler_obj.set_reg_val_MLT(Reg, rx_MLT * ry_MLT)) {
 				txtCC.setText(CC);
 			}
 			break;
-		case "DVD": //21
+		case "DVD": // 21
 			int rx_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if(assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD))
-			{
+			if (assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD)) {
 				txtCC.setText(CC);
 			}
 			break;
-		case "TRR": //22
+		case "TRR": // 22
 			int rx_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if (rx_TRR == ry_TRR){
+			if (rx_TRR == ry_TRR) {
 				CC = "1" + Simulator.CC.substring(1);
 				txtCC.setText(CC);
-			}else{
+			} else {
 				CC = "0" + Simulator.CC.substring(1);
 				txtCC.setText(CC);
 			}
 			break;
-		case "AND": //23
+		case "AND": // 23
 			String rx_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			String ry_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			char[] rx_AND_ARR = rx_AND.toCharArray();
 			char[] ry_AND_ARR = ry_AND.toCharArray();
 			char[] temp_AND = new char[16];
-			for(int i=0; i<16; i++){
-				if(rx_AND_ARR[i] == '1' & ry_AND_ARR[i] == '1'){
+			for (int i = 0; i < 16; i++) {
+				if (rx_AND_ARR[i] == '1' & ry_AND_ARR[i] == '1') {
 					temp_AND[i] = '1';
-				}else {
+				} else {
 					temp_AND[i] = '0';
 				}
 			}
-			String result_AND=String.valueOf(temp_AND);
-			if(instruction.substring(6, 8)=="00"){
+			String result_AND = String.valueOf(temp_AND);
+			if (instruction.substring(6, 8) == "00") {
 				Simulator.R0 = result_AND;
-			}else if(instruction.substring(6, 8)=="01"){
+			} else if (instruction.substring(6, 8) == "01") {
 				Simulator.R1 = result_AND;
-			}else if(instruction.substring(6, 8)=="10"){
+			} else if (instruction.substring(6, 8) == "10") {
 				Simulator.R2 = result_AND;
-			}else if(instruction.substring(6, 8)=="11"){
+			} else if (instruction.substring(6, 8) == "11") {
 				Simulator.R3 = result_AND;
 			}
 			break;
-		case "ORR": //24
+		case "ORR": // 24
 			String rx_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			String ry_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			char[] rx_ORR_ARR = rx_ORR.toCharArray();
 			char[] ry_ORR_ARR = ry_ORR.toCharArray();
 			char[] temp_ORR = new char[16];
-			for(int i=0; i<16; i++){
-				if(rx_ORR_ARR[i] == '1' || ry_ORR_ARR[i] == '1'){
+			for (int i = 0; i < 16; i++) {
+				if (rx_ORR_ARR[i] == '1' || ry_ORR_ARR[i] == '1') {
 					temp_ORR[i] = '1';
-				}else {
+				} else {
 					temp_ORR[i] = '0';
 				}
 			}
-			String result_ORR=String.valueOf(temp_ORR);
-			if(instruction.substring(6, 8)=="00"){
+			String result_ORR = String.valueOf(temp_ORR);
+			if (instruction.substring(6, 8) == "00") {
 				Simulator.R0 = result_ORR;
-			}else if(instruction.substring(6, 8)=="01"){
+			} else if (instruction.substring(6, 8) == "01") {
 				Simulator.R1 = result_ORR;
-			}else if(instruction.substring(6, 8)=="10"){
+			} else if (instruction.substring(6, 8) == "10") {
 				Simulator.R2 = result_ORR;
-			}else if(instruction.substring(6, 8)=="11"){
+			} else if (instruction.substring(6, 8) == "11") {
 				Simulator.R3 = result_ORR;
 			}
 			break;
-		case "NOT": //25
+		case "NOT": // 25
 			String rx_NOT = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 
 			char[] rx_NOT_ARR = rx_NOT.toCharArray();
 			char[] temp_NOT = new char[16];
-			for(int i=0; i<16; i++){
-				if(rx_NOT_ARR[i] == '1'){
+			for (int i = 0; i < 16; i++) {
+				if (rx_NOT_ARR[i] == '1') {
 					temp_NOT[i] = '0';
-				}else {
+				} else {
 					temp_NOT[i] = '1';
 				}
 			}
-			String result_NOT=String.valueOf(temp_NOT);
-			if(instruction.substring(6, 8)=="00"){
+			String result_NOT = String.valueOf(temp_NOT);
+			if (instruction.substring(6, 8) == "00") {
 				Simulator.R0 = result_NOT;
-			}else if(instruction.substring(6, 8)=="01"){
+			} else if (instruction.substring(6, 8) == "01") {
 				Simulator.R1 = result_NOT;
-			}else if(instruction.substring(6, 8)=="10"){
+			} else if (instruction.substring(6, 8) == "10") {
 				Simulator.R2 = result_NOT;
-			}else if(instruction.substring(6, 8)=="11"){
+			} else if (instruction.substring(6, 8) == "11") {
 				Simulator.R3 = result_NOT;
 			}
 			break;
-		case "SRC": //31
+		case "SRC": // 31
 			String content = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int AL = Integer.parseInt(instruction.substring(8, 9));
 			int LR = Integer.parseInt(instruction.substring(9, 10));
 			int count = Integer.parseInt(instruction.substring(12, 16));
-			if(count==0){ break; }
-			if(AL==1){
-				//logically
-				if(LR==1){
-					//logically left
+			if (count == 0) {
+				break;
+			}
+			if (AL == 1) {
+				// logically
+				if (LR == 1) {
+					// logically left
 					char[] temp = content.toCharArray();
-					for(int i=0; i<16-count; i++){
-						temp[i] = temp[i+count];
+					for (int i = 0; i < 16 - count; i++) {
+						temp[i] = temp[i + count];
 					}
-					for(int j=16-count; j<8; j++){
+					for (int j = 16 - count; j < 8; j++) {
 						temp[j] = '0';
 					}
-					if(instruction.substring(6, 8)=="00"){
+					if (instruction.substring(6, 8) == "00") {
 						Simulator.R0 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="01"){
+					} else if (instruction.substring(6, 8) == "01") {
 						Simulator.R1 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="10"){
+					} else if (instruction.substring(6, 8) == "10") {
 						Simulator.R2 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="11"){
+					} else if (instruction.substring(6, 8) == "11") {
 						Simulator.R3 = String.valueOf(temp);
 					}
-				}else{
-					//logically right
+				} else {
+					// logically right
 					char[] temp = content.toCharArray();
-					for(int i=15; i>=count; i--){
-						temp[i] = temp[i-count];
+					for (int i = 15; i >= count; i--) {
+						temp[i] = temp[i - count];
 					}
-					for(int j=count-1; j>=0; j--){
+					for (int j = count - 1; j >= 0; j--) {
 						temp[j] = '0';
 					}
-					if(instruction.substring(6, 8)=="00"){
+					if (instruction.substring(6, 8) == "00") {
 						Simulator.R0 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="01"){
+					} else if (instruction.substring(6, 8) == "01") {
 						Simulator.R1 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="10"){
+					} else if (instruction.substring(6, 8) == "10") {
 						Simulator.R2 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="11"){
+					} else if (instruction.substring(6, 8) == "11") {
 						Simulator.R3 = String.valueOf(temp);
 					}
 				}
-			}else{
-				//arithetically
-				if(LR==1){
-					//arithetically left
+			} else {
+				// arithetically
+				if (LR == 1) {
+					// arithetically left
 					char[] temp = content.toCharArray();
-					for(int i=1; i<16-count; i++){
-						temp[i] = temp[i+count];
+					for (int i = 1; i < 16 - count; i++) {
+						temp[i] = temp[i + count];
 					}
-					for(int j=16-count; j<8; j++){
+					for (int j = 16 - count; j < 8; j++) {
 						temp[j] = '0';
 					}
-					if(instruction.substring(6, 8)=="00"){
+					if (instruction.substring(6, 8) == "00") {
 						Simulator.R0 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="01"){
+					} else if (instruction.substring(6, 8) == "01") {
 						Simulator.R1 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="10"){
+					} else if (instruction.substring(6, 8) == "10") {
 						Simulator.R2 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="11"){
+					} else if (instruction.substring(6, 8) == "11") {
 						Simulator.R3 = String.valueOf(temp);
 					}
-				}else{
-					//arithetically right
+				} else {
+					// arithetically right
 					char[] temp = content.toCharArray();
-					for(int i=15; i>=count; i--){
-						temp[i] = temp[i-count];
+					for (int i = 15; i >= count; i--) {
+						temp[i] = temp[i - count];
 					}
-					for(int j=count-1; j>=0; j--){
+					for (int j = count - 1; j >= 0; j--) {
 						temp[j] = '0';
 					}
-					if(instruction.substring(6, 8)=="00"){
+					if (instruction.substring(6, 8) == "00") {
 						Simulator.R0 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="01"){
+					} else if (instruction.substring(6, 8) == "01") {
 						Simulator.R1 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="10"){
+					} else if (instruction.substring(6, 8) == "10") {
 						Simulator.R2 = String.valueOf(temp);
-					}else if(instruction.substring(6, 8)=="11"){
+					} else if (instruction.substring(6, 8) == "11") {
 						Simulator.R3 = String.valueOf(temp);
 					}
 				}
 			}
 			break;
-		case "RRC": //32
+		case "RRC": // 32
 			break;
-		case "IN": //61
+		case "IN": // 61
 			break;
-		case "OUT": //62
+		case "OUT": // 62
 			break;
 		default:
 			break;
