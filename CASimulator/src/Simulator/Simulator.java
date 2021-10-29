@@ -572,7 +572,7 @@ public class Simulator extends javax.swing.JFrame {
 			int AL = Integer.parseInt(instruction.substring(8, 9));
 			int LR = Integer.parseInt(instruction.substring(9, 10));
 			int count = Integer.parseInt(instruction.substring(12, 16));
-			if (count == 0) {
+			if (count <= 0 || count > 15) {
 				break;
 			}
 			if (AL == 1) {
@@ -580,10 +580,11 @@ public class Simulator extends javax.swing.JFrame {
 				if (LR == 1) {
 					// logically left
 					char[] temp = content.toCharArray();
-					for (int i = 0; i < 16 - count; i++) {
+					//
+					for (int i = 0; i <= 15 - count; i++) {
 						temp[i] = temp[i + count];
 					}
-					for (int j = 16 - count; j < 8; j++) {
+					for (int j = 15 - count; j <= 15; j++) {
 						temp[j] = '0';
 					}
 					if (instruction.substring(6, 8) == "00") {
@@ -601,7 +602,7 @@ public class Simulator extends javax.swing.JFrame {
 					for (int i = 15; i >= count; i--) {
 						temp[i] = temp[i - count];
 					}
-					for (int j = count - 1; j >= 0; j--) {
+					for (int j = 0; j < count; j++) {
 						temp[j] = '0';
 					}
 					if (instruction.substring(6, 8) == "00") {
@@ -619,10 +620,10 @@ public class Simulator extends javax.swing.JFrame {
 				if (LR == 1) {
 					// arithetically left
 					char[] temp = content.toCharArray();
-					for (int i = 1; i < 16 - count; i++) {
+					for (int i = 1; i <= 15 - count; i++) {
 						temp[i] = temp[i + count];
 					}
-					for (int j = 16 - count; j < 8; j++) {
+					for (int j = 15 - count; j <= 15; j++) {
 						temp[j] = '0';
 					}
 					if (instruction.substring(6, 8) == "00") {
@@ -640,8 +641,8 @@ public class Simulator extends javax.swing.JFrame {
 					for (int i = 15; i >= count; i--) {
 						temp[i] = temp[i - count];
 					}
-					for (int j = count - 1; j >= 0; j--) {
-						temp[j] = '0';
+					for (int j = 1; j < count; j++) {
+						temp[j] = temp[0];
 					}
 					if (instruction.substring(6, 8) == "00") {
 						Simulator.R0 = String.valueOf(temp);
