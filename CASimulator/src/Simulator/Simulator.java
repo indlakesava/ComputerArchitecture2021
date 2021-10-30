@@ -508,15 +508,7 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			String result_AND = String.valueOf(temp_AND);
-			if (instruction.substring(6, 8) == "00") {
-				Simulator.R0 = result_AND;
-			} else if (instruction.substring(6, 8) == "01") {
-				Simulator.R1 = result_AND;
-			} else if (instruction.substring(6, 8) == "10") {
-				Simulator.R2 = result_AND;
-			} else if (instruction.substring(6, 8) == "11") {
-				Simulator.R3 = result_AND;
-			}
+			assembler_obj.output_to_reg(instruction.substring(6, 8), result_AND);
 			break;
 		case "ORR": // 24
 			String rx_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
@@ -532,15 +524,7 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			String result_ORR = String.valueOf(temp_ORR);
-			if (instruction.substring(6, 8) == "00") {
-				Simulator.R0 = result_ORR;
-			} else if (instruction.substring(6, 8) == "01") {
-				Simulator.R1 = result_ORR;
-			} else if (instruction.substring(6, 8) == "10") {
-				Simulator.R2 = result_ORR;
-			} else if (instruction.substring(6, 8) == "11") {
-				Simulator.R3 = result_ORR;
-			}
+			assembler_obj.output_to_reg(instruction.substring(6, 8), result_ORR);
 			break;
 		case "NOT": // 25
 			String rx_NOT = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
@@ -555,106 +539,128 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			String result_NOT = String.valueOf(temp_NOT);
-			if (instruction.substring(6, 8) == "00") {
-				Simulator.R0 = result_NOT;
-			} else if (instruction.substring(6, 8) == "01") {
-				Simulator.R1 = result_NOT;
-			} else if (instruction.substring(6, 8) == "10") {
-				Simulator.R2 = result_NOT;
-			} else if (instruction.substring(6, 8) == "11") {
-				Simulator.R3 = result_NOT;
-			}
+			assembler_obj.output_to_reg(instruction.substring(6, 8), result_NOT);
 			break;
 		case "SRC": // 31
-			String content = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			int AL = Integer.parseInt(instruction.substring(8, 9));
-			int LR = Integer.parseInt(instruction.substring(9, 10));
-			int count = Integer.parseInt(instruction.substring(12, 16));
-			if (count <= 0 || count > 15) {
+			String content_SRC = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int AL_SRC = Integer.parseInt(instruction.substring(8, 9));
+			int LR_SRC = Integer.parseInt(instruction.substring(9, 10));
+			int count_SRC = Integer.parseInt(instruction.substring(12, 16));
+			if (count_SRC == 0 || count_SRC > 15) {
 				break;
 			}
-			if (AL == 1) {
+			char[] temp_SRC = content_SRC.toCharArray();
+			if (AL_SRC == 1) {
 				// logically
-				if (LR == 1) {
+				if (LR_SRC == 1) {
 					// logically left
-					char[] temp = content.toCharArray();
-					//
-					for (int i = 0; i <= 15 - count; i++) {
-						temp[i] = temp[i + count];
+					for (int i = 0; i <= 15 - count_SRC; i++) {
+						temp_SRC[i] = temp_SRC[i + count_SRC];
 					}
-					for (int j = 15 - count; j <= 15; j++) {
-						temp[j] = '0';
+					for (int j = 15 - count_SRC; j <= 15; j++) {
+						temp_SRC[j] = '0';
 					}
-					if (instruction.substring(6, 8) == "00") {
-						Simulator.R0 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "01") {
-						Simulator.R1 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "10") {
-						Simulator.R2 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "11") {
-						Simulator.R3 = String.valueOf(temp);
-					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
+
 				} else {
 					// logically right
-					char[] temp = content.toCharArray();
-					for (int i = 15; i >= count; i--) {
-						temp[i] = temp[i - count];
+					for (int i = 15; i >= count_SRC; i--) {
+						temp_SRC[i] = temp_SRC[i - count_SRC];
 					}
-					for (int j = 0; j < count; j++) {
-						temp[j] = '0';
+					for (int j = 0; j < count_SRC; j++) {
+						temp_SRC[j] = '0';
 					}
-					if (instruction.substring(6, 8) == "00") {
-						Simulator.R0 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "01") {
-						Simulator.R1 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "10") {
-						Simulator.R2 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "11") {
-						Simulator.R3 = String.valueOf(temp);
-					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
 				}
 			} else {
 				// arithetically
-				if (LR == 1) {
+				if (LR_SRC == 1) {
 					// arithetically left
-					char[] temp = content.toCharArray();
-					for (int i = 1; i <= 15 - count; i++) {
-						temp[i] = temp[i + count];
+					for (int i = 1; i <= 15 - count_SRC; i++) {
+						temp_SRC[i] = temp_SRC[i + count_SRC];
 					}
-					for (int j = 15 - count; j <= 15; j++) {
-						temp[j] = '0';
+					for (int j = 15 - count_SRC; j <= 15; j++) {
+						temp_SRC[j] = '0';
 					}
-					if (instruction.substring(6, 8) == "00") {
-						Simulator.R0 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "01") {
-						Simulator.R1 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "10") {
-						Simulator.R2 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "11") {
-						Simulator.R3 = String.valueOf(temp);
-					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
 				} else {
 					// arithetically right
-					char[] temp = content.toCharArray();
-					for (int i = 15; i >= count; i--) {
-						temp[i] = temp[i - count];
+					for (int i = 15; i >= count_SRC; i--) {
+						temp_SRC[i] = temp_SRC[i - count_SRC];
 					}
-					for (int j = 1; j < count; j++) {
-						temp[j] = temp[0];
+					for (int j = 1; j < count_SRC; j++) {
+						temp_SRC[j] = temp_SRC[0];
 					}
-					if (instruction.substring(6, 8) == "00") {
-						Simulator.R0 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "01") {
-						Simulator.R1 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "10") {
-						Simulator.R2 = String.valueOf(temp);
-					} else if (instruction.substring(6, 8) == "11") {
-						Simulator.R3 = String.valueOf(temp);
-					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
 				}
 			}
 			break;
+
 		case "RRC": // 32
+			String content_RRC = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int AL_RRC = Integer.parseInt(instruction.substring(8, 9));
+			int LR_RRC = Integer.parseInt(instruction.substring(9, 10));
+			int count_RRC = Integer.parseInt(instruction.substring(12, 16));
+			if (count_RRC == 0 || count_RRC > 15) {
+				break;
+			}
+			char[] rev = new char[count_RRC];
+			char[] temp_RRC = content_RRC.toCharArray();
+			if (AL_RRC == 1) {
+				// logically
+				if (LR_RRC == 1) {
+					// logically left
+					for (int i = 0; i <= 15 - count_RRC; i++) {
+						if(i < count_RRC){
+							rev[i] = temp_RRC[i];
+						}
+						temp_RRC[i] = temp_RRC[i + count_RRC];
+					}
+					for(int j = 0; j<count_RRC; j++){
+						temp_RRC[15-j] = rev[count_RRC-1-j];
+					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+				} else {
+					// logically right
+					for (int i = 15; i >= count_RRC; i--) {
+						if(15-i < count_RRC){
+							rev[count_RRC-16+i] = temp_RRC[i];
+						}
+						temp_RRC[i] = temp_RRC[i - count_RRC];
+					}
+					for(int j=0; j<count_RRC; j++){
+						temp_RRC[j] = rev[j];
+					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+				}
+			} else {
+				// arithetically
+				if (LR_RRC == 1) {
+					// arithetically left
+					for (int i = 1; i <= 15 - count_RRC; i++) {
+						if(i-1 < count_RRC){
+							rev[i-1] = temp_RRC[i];
+						}
+						temp_RRC[i] = temp_RRC[i + count_RRC];
+					}
+					for(int j = 0; j<count_RRC; j++){
+						temp_RRC[15-j] = rev[count_RRC-1-j];
+					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+				} else {
+					// arithetically right
+					for (int i = 15; i >= count_RRC; i--) {
+						if(15-i < count_RRC){
+							rev[count_RRC-16+i] = temp_RRC[i];
+						}
+						temp_RRC[i] = temp_RRC[i - count_RRC];
+					}
+					for (int j = 1; j < count_RRC; j++) {
+						temp_RRC[j] = rev[j-1];
+					}
+					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+				}
+			}
 			break;
 		case "IN": // 61
 			break;
