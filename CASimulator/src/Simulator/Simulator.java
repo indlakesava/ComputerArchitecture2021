@@ -663,8 +663,10 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			break;
 		case "IN": // 61
+			//input from GUI to register
 			break;
 		case "OUT": // 62
+			//out put from register to GUI
 			break;
 		default:
 			break;
