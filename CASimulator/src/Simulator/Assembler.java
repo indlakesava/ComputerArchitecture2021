@@ -272,6 +272,23 @@ public class Assembler {
 		// Converts Decimal value to Binary format
 		return Integer.toString(i, 2);
 	}
+        
+        public String decToBin16(int i) {
+		// Converts decimal value to Binary format
+		// Also appends zeroes to make it 16 bit
+		String bin = Integer.toString(i, 2);
+		if (bin.length() == 16) {
+			return bin;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 16 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+
+		return sb.toString();
+	}
 
 	public String instructionToWord(String op, String rem) {
 		// Encodes instruction to word(2 bytes) data
@@ -614,6 +631,7 @@ public class Assembler {
 
 	public String EffectiveAddress(String s) {
 		// Method calculates effective address
+                Cache cache_obj = new Cache();
 		int IX = Integer.parseInt(s.substring(0, 2), 2);
 		int I = Integer.parseInt(s.substring(2, 3), 2);
 		int Add = Integer.parseInt(s.substring(3, 8), 2);
@@ -639,10 +657,10 @@ public class Assembler {
 		} else if (I == 1) {
 			if (IX == 0) {
 				// indirect addressing, but NO indexing
-				EA = Simulator.memory[Add];
+				EA = cache_obj.get_memory(Add);
 			} else {
 				// both indirect addressing and indexing
-				EA = Simulator.memory[hexToDec(addHex(decToHex(Add), binToHex(IX_Val)))];
+				EA = cache_obj.get_memory(hexToDec(addHex(decToHex(Add), binToHex(IX_Val))));
 			}
 		}
 		return EA;
