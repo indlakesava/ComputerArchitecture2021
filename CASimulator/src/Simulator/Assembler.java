@@ -522,6 +522,7 @@ public class Assembler {
 			}
 		} else if (operation.equals("JSR")) {// CHECK
 			bin.append("00");
+			bin.append(encode_ix(splitted[0]));
 			if (splitted.length == 3) {
 				bin.append(encode_i(splitted[1]));
 				bin.append(encode_address(splitted[2]));
@@ -531,7 +532,7 @@ public class Assembler {
 			}
 		} else if (operation.equals("RFS")) {// CHECK
 			bin.append("00000");
-			bin.append(hexToBin5(splitted[0]));
+			bin.append(encode_address(splitted[0]));
 		} else if (operation.equals("SOB")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
