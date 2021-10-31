@@ -453,6 +453,30 @@ public class Assembler {
 		}
 	}
 
+	private String encode_count(String count) {
+		String Count = decToBin(Integer.parseInt(count));
+		switch (Count.length()){
+			case 1:
+				return "000" + Count;
+			case 2:
+				return "00" + Count;
+			case 3:
+				return "00" + Count;
+			default:
+				return Count;
+		}
+	}
+
+	private String encode_AL(String AL) {
+		String al = decToBin(Integer.parseInt(AL));
+		return al;
+	}
+
+	private String encode_LR(String LR) {
+		String lr = decToBin(Integer.parseInt(LR));
+		return lr;
+	}
+
 	private String encode_R_IX_I_Add(String s, String operation) {
 		// Encodes General Purpose Register, Index register, Indirect addressing,
 		// Addressing to bits
@@ -610,8 +634,42 @@ public class Assembler {
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
 			bin.append(hexToBin5(splitted[1]));
+		}else if(operation.equals("MLT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("DVD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("TRR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("AND")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("ORR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("NOT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+		}else if(operation.equals("SRC")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_AL(splitted[3]));
+			bin.append(encode_LR(splitted[2]));
+			bin.append("00");
+			bin.append(encode_count(splitted[1]));
+		}else if(operation.equals("RRC")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_AL(splitted[3]));
+			bin.append(encode_LR(splitted[2]));
+			bin.append("00");
+			bin.append(encode_count(splitted[1]));
 		}
-
 		return bin.toString();
 	}
 
