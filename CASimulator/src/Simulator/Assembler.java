@@ -379,6 +379,18 @@ public class Assembler {
 		}
 	}
 
+	public void output_to_reg(String reg, String result) {
+		if (reg == "00") {
+			Simulator.R0 = result;
+		} else if (reg == "01") {
+			Simulator.R1 = result;
+		} else if (reg == "10") {
+			Simulator.R2 = result;
+		} else if (reg == "11") {
+			Simulator.R3 = result;
+		}
+	}
+
 	private String encode_ix(String s_ix) {
 		int ix = Integer.parseInt(s_ix);
 		if (ix == 0) {
