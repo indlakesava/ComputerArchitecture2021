@@ -584,8 +584,10 @@ public class Assembler {
 				bin.append(encode_address(splitted[1]));
 			}
 		} else if (operation.equals("RFS")) {// CHECK
-			bin.append("00000");
-			bin.append(encode_address(splitted[0]));
+			for(int i=0;i<10-(hexToBin(splitted[0])).length();i++) {
+				bin.append("0");
+			}
+			bin.append(hexToBin(splitted[0]));
 		} else if (operation.equals("SOB")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
@@ -627,13 +629,19 @@ public class Assembler {
 				bin.append(encode_address(splitted[2]));
 			}
 		} else if (operation.equals("AIR")) {// CHECK
-			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[0]));	
 			bin.append("000");
-			bin.append(hexToBin5(splitted[1]));
+			for(int i=0;i<5-(hexToBin(splitted[1])).length();i++) {
+				bin.append("0");
+			}
+			bin.append(hexToBin(splitted[1]));
 		} else if (operation.equals("SIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
-			bin.append(hexToBin5(splitted[1]));
+			for(int i=0;i<5-(hexToBin(splitted[1])).length();i++) {
+				bin.append("0");
+			}
+			bin.append(hexToBin(splitted[1]));
 		}else if(operation.equals("MLT")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_reg(splitted[1]));
