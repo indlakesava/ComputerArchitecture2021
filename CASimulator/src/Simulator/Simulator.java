@@ -180,8 +180,7 @@ public class Simulator extends javax.swing.JFrame {
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					res = R3;
 				}
-                                mem = cache_obj.get_memory(assembler_obj.binToDec(res));
-                                if (assembler_obj.hexToDec(mem) == 0) {
+                                if (assembler_obj.binToDec(res) == 0) {
                                         Simulator.PC = assembler_obj.hexToBin16(EA);
                                         txtPC.setText(Simulator.PC);
                                 } 
@@ -203,8 +202,7 @@ public class Simulator extends javax.swing.JFrame {
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					res = R3;
 				}
-                                mem = cache_obj.get_memory(assembler_obj.binToDec(res));
-                                if (assembler_obj.hexToDec(mem) != 0) {
+                                if (assembler_obj.binToDec(res) != 0) {
                                         Simulator.PC = assembler_obj.hexToBin16(EA);
                                         txtPC.setText(Simulator.PC);
                                 }
@@ -251,7 +249,7 @@ public class Simulator extends javax.swing.JFrame {
 			} else {
 				res = assembler_obj.hexToBin16(EA);
 				R3 = assembler_obj.addBin(Simulator.PC, "1");
-				txtR3.setText(R3);
+				txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				Simulator.PC = res;
 				txtPC.setText(Simulator.PC);
 			}
@@ -264,7 +262,7 @@ public class Simulator extends javax.swing.JFrame {
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to														// PC
 			} else {
                                 R0 = assembler_obj.decToBin(Integer.parseInt(EA));
-                                txtR0.setText(R0);
+                                txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
                         }
 			break;
 		case "SOB":
@@ -276,20 +274,20 @@ public class Simulator extends javax.swing.JFrame {
 				int cOr=0;
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOr = assembler_obj.binToDec(R0);
-					R0 = assembler_obj.decToBin(cOr - 1);
-					txtR0.setText(R0);
+					R0 = assembler_obj.decToBin16(cOr - 1);
+//					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOr = assembler_obj.binToDec(R1);
-					R1 = assembler_obj.decToBin(cOr - 1);
-					txtR1.setText(R1);
+					R1 = assembler_obj.decToBin16(cOr - 1);
+					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOr = assembler_obj.binToDec(R2);
-					R2 = assembler_obj.decToBin(cOr - 1);
-					txtR2.setText(R2);
+					R2 = assembler_obj.decToBin16(cOr - 1);
+					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOr = assembler_obj.binToDec(R3);
-					R3 = assembler_obj.decToBin(cOr - 1);
-					txtR3.setText(R3);
+					R3 = assembler_obj.decToBin16(cOr - 1);
+					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 
 				if (cOr > 0) {
@@ -333,19 +331,19 @@ public class Simulator extends javax.swing.JFrame {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR0.setText(R0);
+					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOfR = assembler_obj.binToDec(R1);
 					R1 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR1.setText(R1);
+					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOfR = assembler_obj.binToDec(R2);
 					R2 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR2.setText(R2);
+					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOfR = assembler_obj.binToDec(R3);
 					R3 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR3.setText(R3);
+					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 			}
 			break;
@@ -360,19 +358,19 @@ public class Simulator extends javax.swing.JFrame {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR0.setText(R0);
+					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOfR = assembler_obj.binToDec(R1);
 					R1 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR1.setText(R1);
+					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOfR = assembler_obj.binToDec(R2);
 					R2 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR2.setText(R2);
+					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOfR = assembler_obj.binToDec(R3);
 					R3 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR3.setText(R3);
+					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 			}
 			break;
@@ -382,19 +380,19 @@ public class Simulator extends javax.swing.JFrame {
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				cOfR = assembler_obj.binToDec(R0);
 				R0 = assembler_obj.decToBin(cOfR + immed);
-				txtR0.setText(R0);
+				txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 				cOfR = assembler_obj.binToDec(R1);
 				R1 = assembler_obj.decToBin(cOfR + immed);
-				txtR1.setText(R1);
+				txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 				cOfR = assembler_obj.binToDec(R2);
 				R2 = assembler_obj.decToBin(cOfR + immed);
-				txtR2.setText(R2);
+				txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 				cOfR = assembler_obj.binToDec(R3);
 				R3 = assembler_obj.decToBin(cOfR + immed);
-				txtR3.setText(R3);
+				txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 			}
 			break;
 		case "SIR":
@@ -403,19 +401,19 @@ public class Simulator extends javax.swing.JFrame {
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				cOR = assembler_obj.binToDec(R0);
 				R0 = assembler_obj.decToBin(cOR - immed1);
-				txtR0.setText(R0);
+				txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 				cOR = assembler_obj.binToDec(R1);
 				R1 = assembler_obj.decToBin(cOR - immed1);
-				txtR1.setText(R1);
+				txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 				cOR = assembler_obj.binToDec(R2);
 				R2 = assembler_obj.decToBin(cOR - immed1);
-				txtR2.setText(R2);
+				txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 			} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 				cOR = assembler_obj.binToDec(R3);
 				R3 = assembler_obj.decToBin(cOR - immed1);
-				txtR3.setText(R3);
+				txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 			}
 			break;
 		case "LDR":
