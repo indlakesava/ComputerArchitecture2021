@@ -366,8 +366,10 @@ public class Assembler {
 		int DIVZERO = 0;
 		if (ry == 0) {
 			DIVZERO = 1;
-			Simulator.CC = Simulator.CC.substring(0,2) + "0" + Simulator.CC.substring(3);
+			Simulator.CC = Simulator.CC.substring(0,2) + "1" + Simulator.CC.substring(3);
 			return false;
+		}else{
+			Simulator.CC = Simulator.CC.substring(0,2) + "0" + Simulator.CC.substring(3);
 		}
 		if (reg == 0) {
 			Simulator.R0 = decToBin16(rx / ry);

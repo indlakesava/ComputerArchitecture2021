@@ -536,20 +536,16 @@ public class Simulator extends javax.swing.JFrame {
 		case "DVD": // 21
 			int rx_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if (assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD)) {
-				txtCC.setText(CC);
-			}
+			if (assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD)) {}
 			update_registers();
 			break;
 		case "TRR": // 22
 			int rx_TRR = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_TRR = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			if (rx_TRR == ry_TRR) {
-				CC = "1" + Simulator.CC.substring(1);
-				txtCC.setText(CC);
+				Simulator.CC = Simulator.CC.substring(0,3) + "1" ;
 			} else {
-				CC = "0" + Simulator.CC.substring(1);
-				txtCC.setText(CC);
+				Simulator.CC = Simulator.CC.substring(0,3) + "0" ;
 			}
 			update_registers();
 			break;
