@@ -328,15 +328,19 @@ public class Assembler {
 	}
 
 	public String get_reg_val(String bin_reg) {
-		int reg = Integer.parseInt(bin_reg, 2);
 
-		if (reg == 0) {
+		if (bin_reg.equals("00")) {
 			return Simulator.R0;
-		} else if (reg == 2) {
+		} else if (bin_reg.equals("10")) {
 			return Simulator.R2;
+		} else if (bin_reg.equals("01")) {
+			return Simulator.R1;
+		} else if (bin_reg.equals("11")){
+			return Simulator.R3;
 		} else {
 			return "";
 		}
+
 	}
 
 	public void set_reg_val_MLT(String bin_reg, int result) {
@@ -361,13 +365,12 @@ public class Assembler {
 		}
 	}
 
-	public boolean set_reg_val_DVD(String bin_reg, int rx, int ry) {
+	public void set_reg_val_DVD(String bin_reg, int rx, int ry) {
 		int reg = Integer.parseInt(bin_reg, 2);
 		int DIVZERO = 0;
 		if (ry == 0) {
 			DIVZERO = 1;
 			Simulator.CC = Simulator.CC.substring(0,2) + "1" + Simulator.CC.substring(3);
-			return false;
 		}else{
 			Simulator.CC = Simulator.CC.substring(0,2) + "0" + Simulator.CC.substring(3);
 		}
@@ -378,7 +381,6 @@ public class Assembler {
 			Simulator.R2 = decToBin16(rx / ry);
 			Simulator.R3 = decToBin16(rx % ry);
 		}
-		return false;
 	}
 
 	private String encode_cc(String s_cc) {
@@ -398,13 +400,13 @@ public class Assembler {
 	}
 
 	public void output_to_reg(String reg, String result) {
-		if (reg == "00") {
+		if (reg.equals("00")) {
 			Simulator.R0 = result;
-		} else if (reg == "01") {
+		} else if (reg.equals("01")) {
 			Simulator.R1 = result;
-		} else if (reg == "10") {
+		} else if (reg.equals("10")) {
 			Simulator.R2 = result;
-		} else if (reg == "11") {
+		} else if (reg.equals("11")) {
 			Simulator.R3 = result;
 		}
 	}

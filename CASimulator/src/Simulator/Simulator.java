@@ -536,7 +536,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "DVD": // 21
 			int rx_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if (assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD)) {}
+			assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD);
 			update_registers();
 			break;
 		case "TRR": // 22
