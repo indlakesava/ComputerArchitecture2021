@@ -371,15 +371,15 @@ public class Assembler {
 		if (ry == 0) {
 			DIVZERO = 1;
 			Simulator.CC = Simulator.CC.substring(0,2) + "1" + Simulator.CC.substring(3);
-		}else{
-			Simulator.CC = Simulator.CC.substring(0,2) + "0" + Simulator.CC.substring(3);
-		}
-		if (reg == 0) {
-			Simulator.R0 = decToBin16(rx / ry);
-			Simulator.R1 = decToBin16(rx % ry);
-		} else if (reg == 2) {
-			Simulator.R2 = decToBin16(rx / ry);
-			Simulator.R3 = decToBin16(rx % ry);
+		}else {
+			Simulator.CC = Simulator.CC.substring(0, 2) + "0" + Simulator.CC.substring(3);
+			if (reg == 0) {
+				Simulator.R0 = decToBin16(rx / ry);
+				Simulator.R1 = decToBin16(rx % ry);
+			} else if (reg == 2) {
+				Simulator.R2 = decToBin16(rx / ry);
+				Simulator.R3 = decToBin16(rx % ry);
+			}
 		}
 	}
 
