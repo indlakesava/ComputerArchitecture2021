@@ -142,6 +142,13 @@ public class Simulator extends javax.swing.JFrame {
 			txtarea_instructions.setText("Error running instruction");
 		}
 	}
+	private void update_registers(){
+		txtR0.setText(R0);
+		txtR1.setText(R1);
+		txtR2.setText(R2);
+		txtR3.setText(R3);
+		txtCC.setText(CC);
+	}
 
 	private void single_instruction(String instruction) {
 		// Function that decodes the instruction and then runs that correspondng
@@ -521,22 +528,22 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			break;
 		case "MLT": // 20
-			int rx_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			int ry_MLT = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
-			if (assembler_obj.set_reg_val_MLT(Reg, rx_MLT * ry_MLT)) {
-				txtCC.setText(CC);
-			}
+			int rx_MLT = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_MLT = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			assembler_obj.set_reg_val_MLT(Reg, rx_MLT * ry_MLT);
+			update_registers();
 			break;
 		case "DVD": // 21
-			int rx_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			int ry_DVD = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			int rx_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			if (assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD)) {
 				txtCC.setText(CC);
 			}
+			update_registers();
 			break;
 		case "TRR": // 22
-			int rx_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			int ry_TRR = assembler_obj.hexToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			int rx_TRR = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			int ry_TRR = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			if (rx_TRR == ry_TRR) {
 				CC = "1" + Simulator.CC.substring(1);
 				txtCC.setText(CC);
@@ -544,10 +551,11 @@ public class Simulator extends javax.swing.JFrame {
 				CC = "0" + Simulator.CC.substring(1);
 				txtCC.setText(CC);
 			}
+			update_registers();
 			break;
 		case "AND": // 23
-			String rx_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			String ry_AND = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			String rx_AND = assembler_obj.get_reg_val(instruction.substring(6, 8));
+			String ry_AND = assembler_obj.get_reg_val(instruction.substring(8, 10));
 			char[] rx_AND_ARR = rx_AND.toCharArray();
 			char[] ry_AND_ARR = ry_AND.toCharArray();
 			char[] temp_AND = new char[16];
@@ -560,10 +568,11 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			String result_AND = String.valueOf(temp_AND);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_AND);
+			update_registers();
 			break;
 		case "ORR": // 24
-			String rx_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
-			String ry_ORR = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(8, 10)));
+			String rx_ORR = assembler_obj.get_reg_val(instruction.substring(6, 8));
+			String ry_ORR = assembler_obj.get_reg_val(instruction.substring(8, 10));
 			char[] rx_ORR_ARR = rx_ORR.toCharArray();
 			char[] ry_ORR_ARR = ry_ORR.toCharArray();
 			char[] temp_ORR = new char[16];
@@ -576,9 +585,10 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			String result_ORR = String.valueOf(temp_ORR);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_ORR);
+			update_registers();
 			break;
 		case "NOT": // 25
-			String rx_NOT = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			String rx_NOT = assembler_obj.get_reg_val(instruction.substring(6, 8));
 
 			char[] rx_NOT_ARR = rx_NOT.toCharArray();
 			char[] temp_NOT = new char[16];
@@ -591,9 +601,10 @@ public class Simulator extends javax.swing.JFrame {
 			}
 			String result_NOT = String.valueOf(temp_NOT);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_NOT);
+			update_registers();
 			break;
 		case "SRC": // 31
-			String content_SRC = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			String content_SRC = assembler_obj.get_reg_val(instruction.substring(6, 8));
 			int AL_SRC = Integer.parseInt(instruction.substring(8, 9));
 			int LR_SRC = Integer.parseInt(instruction.substring(9, 10));
 			int count_SRC = Integer.parseInt(instruction.substring(12, 16));
@@ -645,10 +656,11 @@ public class Simulator extends javax.swing.JFrame {
 					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
 				}
 			}
+			update_registers();
 			break;
 
 		case "RRC": // 32
-			String content_RRC = assembler_obj.hexToBin(assembler_obj.get_reg_val(instruction.substring(6, 8)));
+			String content_RRC = assembler_obj.get_reg_val(instruction.substring(6, 8));
 			int AL_RRC = Integer.parseInt(instruction.substring(8, 9));
 			int LR_RRC = Integer.parseInt(instruction.substring(9, 10));
 			int count_RRC = Integer.parseInt(instruction.substring(12, 16));
@@ -712,6 +724,7 @@ public class Simulator extends javax.swing.JFrame {
 					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
 				}
 			}
+			update_registers();
 			break;
 		case "IN": // 61
 			// input from GUI to register

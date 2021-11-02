@@ -290,6 +290,19 @@ public class Assembler {
 		return sb.toString();
 	}
 
+	public String decToBin32(int i) {
+		String bin = Integer.toString(i, 2);
+		if (bin.length() == 32) {
+			return bin;
+		}
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 32 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+		return sb.toString();
+	}
+
 	public String instructionToWord(String op, String rem) {
 		// Encodes instruction to word(2 bytes) data
 		String instructionWord = "";
@@ -326,40 +339,26 @@ public class Assembler {
 		}
 	}
 
-	public boolean set_reg_val_MLT(String bin_reg, int result) {
+	public void set_reg_val_MLT(String bin_reg, int result) {
 		int reg = Integer.parseInt(bin_reg, 2);
 		int overflow = 0;
 		String bin_result = "";
-
 		if (result > 65535) {
+			Simulator.CC = "1" + Simulator.CC.substring(1);
 			overflow = 1;
+		} else {
+			Simulator.CC = "0" + Simulator.CC.substring(1);
 		}
-
 		if (reg == 0) {
-			if (overflow == 0) {
-				Simulator.R0 = decToBin(result);
-				return false;
-			}
-			if (overflow == 1) {
-				Simulator.CC = "1" + Simulator.CC.substring(1);
-				bin_result = decToBin(result);
-				Simulator.R1 = bin_result.substring(bin_result.length() - 16, 16);
-				Simulator.R0 = bin_result.substring(bin_result.length(), bin_result.length() - 16);
-				return true;
-			}
+			bin_result = decToBin32(result);
+			Simulator.R0 = bin_result.substring(0, 16);
+			Simulator.R1 = bin_result.substring(16, 32);
+
 		} else if (reg == 2) {
-			if (overflow == 0) {
-				Simulator.R2 = decToBin(result);
-				return false;
-			}
-			if (overflow == 1) {
-				bin_result = decToBin(result);
-				Simulator.R3 = bin_result.substring(bin_result.length() - 16, 16);
-				Simulator.R2 = bin_result.substring(bin_result.length(), bin_result.length() - 16);
-				return true;
-			}
+			bin_result = decToBin32(result);
+			Simulator.R2 = bin_result.substring(0, 16);
+			Simulator.R3 = bin_result.substring(16, 32);
 		}
-		return false;
 	}
 
 	public boolean set_reg_val_DVD(String bin_reg, int rx, int ry) {
@@ -367,15 +366,15 @@ public class Assembler {
 		int DIVZERO = 0;
 		if (ry == 0) {
 			DIVZERO = 1;
-			Simulator.CC = "1" + Simulator.CC.substring(1);
+			Simulator.CC = Simulator.CC.substring(0,2) + "0" + Simulator.CC.substring(3);
 			return false;
 		}
 		if (reg == 0) {
-			Simulator.R0 = decToBin(rx / ry);
-			Simulator.R1 = decToBin(rx % ry);
+			Simulator.R0 = decToBin16(rx / ry);
+			Simulator.R1 = decToBin16(rx % ry);
 		} else if (reg == 2) {
-			Simulator.R2 = decToBin(rx / ry);
-			Simulator.R3 = decToBin(rx % ry);
+			Simulator.R2 = decToBin16(rx / ry);
+			Simulator.R3 = decToBin16(rx % ry);
 		}
 		return false;
 	}
