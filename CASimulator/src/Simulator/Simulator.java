@@ -615,7 +615,7 @@ public class Simulator extends javax.swing.JFrame {
 					for (int i = 0; i <= 15 - count_SRC; i++) {
 						temp_SRC[i] = temp_SRC[i + count_SRC];
 					}
-					for (int j = 15 - count_SRC; j <= 15; j++) {
+					for (int j = 16 - count_SRC; j <= 15; j++) {
 						temp_SRC[j] = '0';
 					}
 					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
@@ -637,16 +637,16 @@ public class Simulator extends javax.swing.JFrame {
 					for (int i = 1; i <= 15 - count_SRC; i++) {
 						temp_SRC[i] = temp_SRC[i + count_SRC];
 					}
-					for (int j = 15 - count_SRC; j <= 15; j++) {
+					for (int j = 16 - count_SRC; j <= 15; j++) {
 						temp_SRC[j] = '0';
 					}
 					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
 				} else {
 					// arithetically right
-					for (int i = 15; i >= count_SRC; i--) {
+					for (int i = 15; i > count_SRC; i--) {
 						temp_SRC[i] = temp_SRC[i - count_SRC];
 					}
-					for (int j = 1; j < count_SRC; j++) {
+					for (int j = 1; j <= count_SRC; j++) {
 						temp_SRC[j] = temp_SRC[0];
 					}
 					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
@@ -657,9 +657,9 @@ public class Simulator extends javax.swing.JFrame {
 
 		case "RRC": // 32
 			String content_RRC = assembler_obj.get_reg_val(instruction.substring(6, 8));
-			int AL_RRC = Integer.parseInt(instruction.substring(8, 9));
-			int LR_RRC = Integer.parseInt(instruction.substring(9, 10));
-			int count_RRC = Integer.parseInt(instruction.substring(12, 16));
+			int AL_RRC = assembler_obj.binToDec(instruction.substring(8, 9));
+			int LR_RRC = assembler_obj.binToDec(instruction.substring(9, 10));
+			int count_RRC = assembler_obj.binToDec(instruction.substring(12));
 			if (count_RRC == 0 || count_RRC > 15) {
 				break;
 			}

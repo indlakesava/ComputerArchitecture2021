@@ -464,7 +464,7 @@ public class Assembler {
 			case 2:
 				return "00" + Count;
 			case 3:
-				return "00" + Count;
+				return "0" + Count;
 			default:
 				return Count;
 		}
@@ -676,8 +676,8 @@ public class Assembler {
 			bin.append(encode_count(splitted[1]));
 		}else if(operation.equals("RRC")) {
 			bin.append(encode_reg(splitted[0]));
-			bin.append(encode_AL(splitted[3]));
-			bin.append(encode_LR(splitted[2]));
+			bin.append(splitted[3]);
+			bin.append(splitted[2]);
 			bin.append("00");
 			bin.append(encode_count(splitted[1]));
 		}
