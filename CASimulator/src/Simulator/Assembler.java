@@ -680,6 +680,12 @@ public class Assembler {
 			bin.append(splitted[2]);
 			bin.append("00");
 			bin.append(encode_count(splitted[1]));
+		}else if(operation.equals("IN")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+		}else if(operation.equals("OUT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
 		}
 		return bin.toString();
 	}
