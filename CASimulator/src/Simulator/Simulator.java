@@ -167,7 +167,7 @@ public class Simulator extends javax.swing.JFrame {
 		txtAddress.setText(instruction.substring(11, 16));
 		txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
 				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
-		String EA, mem, res;
+		String EA, mem, res, reg_val;
 		int mem_loc;
 
 		switch (ins) {
@@ -601,55 +601,41 @@ public class Simulator extends javax.swing.JFrame {
 			break;
 		case "SRC": // 31
 			String content_SRC = assembler_obj.get_reg_val(instruction.substring(6, 8));
-			int AL_SRC = Integer.parseInt(instruction.substring(8, 9));
-			int LR_SRC = Integer.parseInt(instruction.substring(9, 10));
-			int count_SRC = Integer.parseInt(instruction.substring(12, 16));
+			int AL_SRC = assembler_obj.binToDec(instruction.substring(8, 9));
+			int LR_SRC = assembler_obj.binToDec(instruction.substring(9, 10));
+			int count_SRC = assembler_obj.binToDec(instruction.substring(12));
+                        String Zeroes = "0000000000000000";
+                        String Ones = "1111111111111111";
 			if (count_SRC == 0 || count_SRC > 15) {
 				break;
 			}
-			char[] temp_SRC = content_SRC.toCharArray();
 			if (AL_SRC == 1) {
 				// logically
 				if (LR_SRC == 1) {
 					// logically left
-					for (int i = 0; i <= 15 - count_SRC; i++) {
-						temp_SRC[i] = temp_SRC[i + count_SRC];
-					}
-					for (int j = 16 - count_SRC; j <= 15; j++) {
-						temp_SRC[j] = '0';
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
-
+                                        reg_val = content_SRC.substring(count_SRC) + Zeroes.substring(0, count_SRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// logically right
-					for (int i = 15; i >= count_SRC; i--) {
-						temp_SRC[i] = temp_SRC[i - count_SRC];
-					}
-					for (int j = 0; j < count_SRC; j++) {
-						temp_SRC[j] = '0';
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
+					reg_val = Zeroes.substring(16-count_SRC) + content_SRC.substring(0,16-count_SRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				}
 			} else {
 				// arithetically
 				if (LR_SRC == 1) {
 					// arithetically left
-					for (int i = 1; i <= 15 - count_SRC; i++) {
-						temp_SRC[i] = temp_SRC[i + count_SRC];
-					}
-					for (int j = 16 - count_SRC; j <= 15; j++) {
-						temp_SRC[j] = '0';
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
+					reg_val = content_SRC.substring(0, 1) + content_SRC.substring(1+count_SRC) + Zeroes.substring(0, count_SRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// arithetically right
-					for (int i = 15; i > count_SRC; i--) {
-						temp_SRC[i] = temp_SRC[i - count_SRC];
-					}
-					for (int j = 1; j <= count_SRC; j++) {
-						temp_SRC[j] = temp_SRC[0];
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_SRC));
+                                        if(content_SRC.substring(0, 1).equals("1")){
+                                                reg_val = content_SRC.substring(0, 1) + Ones.substring(16-count_SRC) + content_SRC.substring(1,16-count_SRC);
+                                                assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
+                                        }
+                                        else if(content_SRC.substring(0, 1).equals("0")){
+                                                reg_val = content_SRC.substring(0, 1) + Zeroes.substring(16-count_SRC) + content_SRC.substring(1,16-count_SRC);
+                                                assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
+                                        }
 				}
 			}
 			update_registers();
@@ -663,13 +649,13 @@ public class Simulator extends javax.swing.JFrame {
 			if (count_RRC == 0 || count_RRC > 15) {
 				break;
 			}
-			char[] rev = new char[count_RRC];
-			char[] temp_RRC = content_RRC.toCharArray();
+			//char[] rev = new char[count_RRC];
+			//char[] temp_RRC = content_RRC.toCharArray();
 			if (AL_RRC == 1) {
 				// logically
 				if (LR_RRC == 1) {
 					// logically left
-					for (int i = 0; i <= 15 - count_RRC; i++) {
+					/*for (int i = 0; i <= 15 - count_RRC; i++) {
 						if (i < count_RRC) {
 							rev[i] = temp_RRC[i];
 						}
@@ -677,10 +663,12 @@ public class Simulator extends javax.swing.JFrame {
 					}
 					for (int j = 0; j < count_RRC; j++) {
 						temp_RRC[15 - j] = rev[count_RRC - 1 - j];
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+					}*/
+                                        reg_val = content_RRC.substring(count_RRC) + content_RRC.substring(0, count_RRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// logically right
+                                        /*
 					for (int i = 15; i >= count_RRC; i--) {
 						if (15 - i < count_RRC) {
 							rev[count_RRC - 16 + i] = temp_RRC[i];
@@ -689,13 +677,15 @@ public class Simulator extends javax.swing.JFrame {
 					}
 					for (int j = 0; j < count_RRC; j++) {
 						temp_RRC[j] = rev[j];
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+					}*/
+					reg_val = content_RRC.substring(16-count_RRC) + content_RRC.substring(0,16-count_RRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				}
 			} else {
 				// arithetically
 				if (LR_RRC == 1) {
 					// arithetically left
+                                        /*
 					for (int i = 1; i <= 15 - count_RRC; i++) {
 						if (i - 1 < count_RRC) {
 							rev[i - 1] = temp_RRC[i];
@@ -705,9 +695,12 @@ public class Simulator extends javax.swing.JFrame {
 					for (int j = 0; j < count_RRC; j++) {
 						temp_RRC[15 - j] = rev[count_RRC - 1 - j];
 					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+                                        */
+					reg_val = content_RRC.substring(0, 1) + content_RRC.substring(1+count_RRC) + content_RRC.substring(1, 1+count_RRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// arithetically right
+                                        /*
 					for (int i = 15; i >= count_RRC; i--) {
 						if (15 - i < count_RRC) {
 							rev[count_RRC - 16 + i] = temp_RRC[i];
@@ -716,8 +709,9 @@ public class Simulator extends javax.swing.JFrame {
 					}
 					for (int j = 1; j < count_RRC; j++) {
 						temp_RRC[j] = rev[j - 1];
-					}
-					assembler_obj.output_to_reg(instruction.substring(6, 8), String.valueOf(temp_RRC));
+					}*/
+					reg_val = content_RRC.substring(0, 1) + content_RRC.substring(16-count_RRC) + content_RRC.substring(1,16-count_RRC);
+					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				}
 			}
 			update_registers();
