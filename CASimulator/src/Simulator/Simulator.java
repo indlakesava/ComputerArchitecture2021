@@ -306,11 +306,11 @@ public class Simulator extends javax.swing.JFrame {
 
 				if (cOr > 0) {
 					Simulator.PC = assembler_obj.hexToBin16(EA);
-					txtPC.setText(Simulator.PC);
 				}
+				else // cOr is less than zero we have to set the underflow bit
+					Simulator.CC = Simulator.CC.substring(0,1) + "1" + Simulator.CC.substring(2);
+				update_registers();
 			}
-                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
-				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -335,8 +335,6 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(Simulator.PC);
 				}
 			}
-                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
-				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -345,7 +343,7 @@ public class Simulator extends javax.swing.JFrame {
 			} else {
 				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
 				int cOfEA = assembler_obj.hexToDec(mem);
-				int cOfR;
+				int cOfR=0;
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfEA + cOfR);
@@ -363,9 +361,14 @@ public class Simulator extends javax.swing.JFrame {
 					R3 = assembler_obj.decToBin(cOfEA + cOfR);
 					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
+				if (cOfR<0)
+				   Simulator.CC = "01" + Simulator.CC.substring(2);
+				else if (cOfR > 65535)
+				   Simulator.CC = "10"+Simulator.CC.substring(2);
+				else
+					Simulator.CC = "00"+Simulator.CC.substring(2);
+				update_registers();
 			}
-                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
-				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "SMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -374,7 +377,7 @@ public class Simulator extends javax.swing.JFrame {
 			} else {
 				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
 				int cOfEA = assembler_obj.hexToDec(mem);
-				int cOfR;
+				int cOfR=0;
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfR - cOfEA);
@@ -392,12 +395,17 @@ public class Simulator extends javax.swing.JFrame {
 					R3 = assembler_obj.decToBin(cOfR - cOfEA);
 					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
+				if (cOfR<0)
+					   Simulator.CC = "01" + Simulator.CC.substring(2);
+					else if (cOfR > 65535)
+					   Simulator.CC = "10"+Simulator.CC.substring(2);
+					else
+						Simulator.CC = "00"+Simulator.CC.substring(2);
+					update_registers();
 			}
-                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
-				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AIR":
-			int cOfR;
+			int cOfR=0;
 			immed = assembler_obj.binToDec(instruction.substring(8, instruction.length()));
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				cOfR = assembler_obj.binToDec(R0);
@@ -416,10 +424,18 @@ public class Simulator extends javax.swing.JFrame {
 				R3 = assembler_obj.decToBin16(cOfR + immed);
 				txtR0.setText(R3);
 			}
+			if (cOfR<0)
+				   Simulator.CC = "01" + Simulator.CC.substring(2);
+				else if (cOfR > 65535)
+				   Simulator.CC = "10"+Simulator.CC.substring(2);
+				else
+					Simulator.CC = "00"+Simulator.CC.substring(2);
+				update_registers();
 			txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
 					+  assembler_obj.decToHex(immed));
 			break;
 		case "SIR":
+			cOfR=0;
 			immed = assembler_obj.binToDec(instruction.substring(8, instruction.length()));
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 				cOfR = assembler_obj.binToDec(R0);
@@ -438,6 +454,13 @@ public class Simulator extends javax.swing.JFrame {
 				R3 = assembler_obj.decToBin16(cOfR - immed);
 				txtR0.setText(R3);
 			}
+			if (cOfR<0)
+				   Simulator.CC = "01" + Simulator.CC.substring(2);
+				else if (cOfR > 65535)
+				   Simulator.CC = "10"+Simulator.CC.substring(2);
+				else
+					Simulator.CC = "00"+Simulator.CC.substring(2);
+				update_registers();
 			txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
 					+  assembler_obj.decToHex(immed));
 			break;
