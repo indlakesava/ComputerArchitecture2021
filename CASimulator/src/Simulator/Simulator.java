@@ -167,8 +167,6 @@ public class Simulator extends javax.swing.JFrame {
 		txtIndirect.setText(instruction.substring(10, 11));
 		String Add = instruction.substring(11, 16);
 		txtAddress.setText(instruction.substring(11, 16));
-		txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
-				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 		String EA, mem, res, reg_val;
 		int mem_loc;
 
@@ -194,6 +192,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JNE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -216,6 +216,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JCC":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -237,6 +239,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JMA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -249,6 +253,8 @@ public class Simulator extends javax.swing.JFrame {
 				Simulator.PC = assembler_obj.hexToBin16(EA);
 				txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(IX) 
+                                + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JSR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -262,6 +268,8 @@ public class Simulator extends javax.swing.JFrame {
 				Simulator.PC = res;
 				txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(IX) 
+                                + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "RFS":
 			Simulator.PC = R3;
@@ -301,6 +309,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(Simulator.PC);
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -325,6 +335,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(Simulator.PC);
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -352,6 +364,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "SMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -379,6 +393,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AIR":
 			int cOfR;
@@ -447,6 +463,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtR3.setText(res);
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "LDA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -469,6 +487,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtR3.setText(res);
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "LDX":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -492,6 +512,8 @@ public class Simulator extends javax.swing.JFrame {
 					}
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(IX) 
+                                + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "STR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -509,6 +531,8 @@ public class Simulator extends javax.swing.JFrame {
 					cache_obj.set_memory(mem_loc, assembler_obj.binToHex(Simulator.R3));
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "STX":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -528,18 +552,24 @@ public class Simulator extends javax.swing.JFrame {
 					}
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(IX) 
+                                + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "MLT": // 20
 			int rx_MLT = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_MLT = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			assembler_obj.set_reg_val_MLT(Reg, rx_MLT * ry_MLT);
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(8, 10)));
 			break;
 		case "DVD": // 21
 			int rx_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
 			int ry_DVD = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(8, 10)));
 			assembler_obj.set_reg_val_DVD(Reg, rx_DVD, ry_DVD);
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(8, 10)));
 			break;
 		case "TRR": // 22
 			int rx_TRR = assembler_obj.binToDec(assembler_obj.get_reg_val(instruction.substring(6, 8)));
@@ -550,6 +580,8 @@ public class Simulator extends javax.swing.JFrame {
 				Simulator.CC = Simulator.CC.substring(0,3) + "0" ;
 			}
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(8, 10)));
 			break;
 		case "AND": // 23
 			String rx_AND = assembler_obj.get_reg_val(instruction.substring(6, 8));
@@ -567,6 +599,8 @@ public class Simulator extends javax.swing.JFrame {
 			String result_AND = String.valueOf(temp_AND);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_AND);
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(8, 10)));
 			break;
 		case "ORR": // 24
 			String rx_ORR = assembler_obj.get_reg_val(instruction.substring(6, 8));
@@ -584,6 +618,8 @@ public class Simulator extends javax.swing.JFrame {
 			String result_ORR = String.valueOf(temp_ORR);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_ORR);
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(8, 10)));
 			break;
 		case "NOT": // 25
 			String rx_NOT = assembler_obj.get_reg_val(instruction.substring(6, 8));
@@ -600,6 +636,7 @@ public class Simulator extends javax.swing.JFrame {
 			String result_NOT = String.valueOf(temp_NOT);
 			assembler_obj.output_to_reg(instruction.substring(6, 8), result_NOT);
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg));
 			break;
 		case "SRC": // 31
 			String content_SRC = assembler_obj.get_reg_val(instruction.substring(6, 8));
@@ -641,6 +678,9 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(12)) + "," + assembler_obj.binToHex(instruction.substring(8, 9)) 
+                                +"," + assembler_obj.binToHex(instruction.substring(8, 9)));
 			break;
 
 		case "RRC": // 32
@@ -717,11 +757,15 @@ public class Simulator extends javax.swing.JFrame {
 				}
 			}
 			update_registers();
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(instruction.substring(12)) + "," + assembler_obj.binToHex(instruction.substring(8, 9)) 
+                                +"," + assembler_obj.binToHex(instruction.substring(8, 9)));
 			break;
 		case "IN": // 61
 			// input from GUI to register
                         In in_obj = new In();
                         In.register = Reg;
+                        txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(Reg)));
                         in_obj.setVisible(true);
                         this.setVisible(false);
 			break;
