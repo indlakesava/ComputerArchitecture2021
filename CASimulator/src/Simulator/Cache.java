@@ -20,7 +20,7 @@ public class Cache {
             temp[add%4] = data;
             Simulator.cache_d.replace(tag_cache, temp);
         } else {
-            if(Simulator.cache_q.size()==4){
+            if(Simulator.cache_q.size()==16){
                 Simulator.cache_d.remove(Simulator.cache_q.peek());
                 Simulator.cache_q.remove();
             }
@@ -45,7 +45,7 @@ public class Cache {
         if(Simulator.cache_d.containsKey(tag_cache)){
             return Simulator.cache_d.get(tag_cache)[offset_cache];
         }else {
-            if(Simulator.cache_q.size()==4){
+            if(Simulator.cache_q.size()==16){
                 Simulator.cache_d.remove(Simulator.cache_q.peek());
                 Simulator.cache_q.remove();
             } 
