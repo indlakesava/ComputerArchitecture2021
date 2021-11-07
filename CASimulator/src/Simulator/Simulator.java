@@ -44,6 +44,7 @@ public class Simulator extends javax.swing.JFrame {
 	public static String IR = "0000000000000000";
 	public static String MFR = "0000";
 	public static String CC = "0000";
+        public String IN = "";
 
 	DefaultTableModel memory_model;
 	DefaultTableModel cache_model;
@@ -311,6 +312,8 @@ public class Simulator extends javax.swing.JFrame {
 					Simulator.CC = Simulator.CC.substring(0,1) + "1" + Simulator.CC.substring(2);
 				update_registers();
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -335,6 +338,8 @@ public class Simulator extends javax.swing.JFrame {
 					txtPC.setText(Simulator.PC);
 				}
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -369,6 +374,8 @@ public class Simulator extends javax.swing.JFrame {
 					Simulator.CC = "00"+Simulator.CC.substring(2);
 				update_registers();
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "SMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
@@ -403,6 +410,8 @@ public class Simulator extends javax.swing.JFrame {
 						Simulator.CC = "00"+Simulator.CC.substring(2);
 					update_registers();
 			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
 			break;
 		case "AIR":
 			int cOfR=0;
@@ -786,17 +795,16 @@ public class Simulator extends javax.swing.JFrame {
 			break;
 		case "IN": // 61
 			// input from GUI to register
-                        In in_obj = new In();
-                        In.register = Reg;
-                        txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(Reg)));
-                        in_obj.setVisible(true);
-                        this.setVisible(false);
+                        String val = JOptionPane.showInputDialog(this, "Enter a Value");
+                        assembler_obj.output_to_reg(Reg, assembler_obj.decToBin16(Integer.parseInt(val)));
+                        txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)) + ",0");
 			break;
 		case "OUT": // 62
 			// out put from register to GUI
                         String content_OUT = assembler_obj.get_reg_val(instruction.substring(6, 8));
-                        txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
-			break;
+                        //txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
+			JOptionPane.showMessageDialog(this, "Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
+                        break;
 		default:
 			break;
 		}
@@ -1311,14 +1319,14 @@ public class Simulator extends javax.swing.JFrame {
                                 .addComponent(btn_LD_MAR)))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_Store, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Run, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_IPL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_SI, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Run, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Store, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_Load, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1488,6 +1496,8 @@ public class Simulator extends javax.swing.JFrame {
                             .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btn_IPL, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1497,9 +1507,8 @@ public class Simulator extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btn_Load, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_Store, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addComponent(btn_Store, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())

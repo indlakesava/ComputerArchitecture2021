@@ -383,22 +383,6 @@ public class Assembler {
 		}
 	}
 
-	private String encode_cc(String s_cc) {
-		int cc = Integer.parseInt(s_cc);
-		if (cc == 0) {
-			return "00";
-		} else if (cc == 1) {
-			return "01";
-		} else if (cc == 2) {
-			return "10";
-		} else if (cc == 3) {
-			return "11";
-		} else {
-			Simulator.error = "Invalid Condition Code";
-			return "";
-		}
-	}
-
 	public void output_to_reg(String reg, String result) {
 		if (reg.equals("00")) {
 			Simulator.R0 = result;
@@ -557,7 +541,7 @@ public class Assembler {
 				bin.append(encode_address(splitted[2]));
 			}
 		} else if (operation.equals("JCC")) {
-			bin.append(encode_cc(splitted[0]));
+			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
 			if (splitted.length == 4) {
 				bin.append(encode_i(splitted[2]));

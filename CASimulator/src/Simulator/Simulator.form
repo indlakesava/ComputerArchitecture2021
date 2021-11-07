@@ -89,14 +89,14 @@
                       </Group>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="297" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="327" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btn_Store" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="btn_Run" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                           <Component id="btn_IPL" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                           <Component id="btn_SI" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="btn_Run" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="btn_Store" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                           <Component id="btn_Load" alignment="1" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -304,7 +304,9 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="1" pref="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Component id="btn_IPL" min="-2" pref="50" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btn_SI" min="-2" pref="50" max="-2" attributes="0"/>
@@ -314,9 +316,8 @@
                               <Component id="btn_Load" min="-2" pref="50" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="btn_Store" min="-2" pref="50" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jScrollPane1" alignment="1" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane3" min="-2" pref="238" max="-2" attributes="0"/>
