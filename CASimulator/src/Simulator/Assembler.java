@@ -90,6 +90,9 @@ public class Assembler {
 		case "RRC":
 			encoded_opcode = "100000"; // 32
 			break;
+                case "TRAP":
+			encoded_opcode = "100100"; // 36
+			break;
 		case "IN":
 			encoded_opcode = "111101"; // 61
 			break;
@@ -180,6 +183,9 @@ public class Assembler {
 			break;
 		case "100000": // 32
 			decoded_opcode = "RRC";
+			break;
+                case "100100": // 36
+			decoded_opcode = "TRAP"; 
 			break;
 		case "111101": // 61
 			decoded_opcode = "IN";
@@ -664,7 +670,10 @@ public class Assembler {
 			bin.append(splitted[2]);
 			bin.append("00");
 			bin.append(encode_count(splitted[1]));
-		}else if(operation.equals("IN")) {
+		}else if(operation.equals("TRAP")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+                }else if(operation.equals("IN")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append("00000000");
 		}else if(operation.equals("OUT")) {

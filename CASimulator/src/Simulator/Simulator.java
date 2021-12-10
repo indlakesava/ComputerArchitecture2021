@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import java.util.Arrays;
 
 /**
  *
@@ -45,6 +46,9 @@ public class Simulator extends javax.swing.JFrame {
 	public static String MFR = "0000";
 	public static String CC = "0000";
         public String IN = "";
+        private int sentences_len = 0;
+        private int word_len = 0;
+        private String word = "";
 
 	DefaultTableModel memory_model;
 	DefaultTableModel cache_model;
@@ -56,6 +60,7 @@ public class Simulator extends javax.swing.JFrame {
 		loadComponents();
 		setTblMemory();
 		setTblCache();
+                setTrap();
 	}
 
 	private void loadComponents() {
@@ -98,6 +103,97 @@ public class Simulator extends javax.swing.JFrame {
 			txtarea_instructions.setText("Error Loading Memory Table");
 		}
 	}
+        
+        private enum Trap {
+            read_sentences, get_word, search_word
+        }
+        
+        private void setTrap()
+        {
+                Assembler assembler_obj = new Assembler();
+                Simulator.memory[0] = assembler_obj.binToHex("0000000111000010");
+                Simulator.memory[450] = assembler_obj.binToHex(assembler_obj.decToBin16(Trap.read_sentences.ordinal()));
+                Simulator.memory[451] = assembler_obj.binToHex(assembler_obj.decToBin16(Trap.get_word.ordinal()));
+                Simulator.memory[452] = assembler_obj.binToHex(assembler_obj.decToBin16(Trap.search_word.ordinal()));
+        }
+        
+        private void read_sentences(){
+                String sentences = JOptionPane.showInputDialog(this, "Enter the paragraph (6 sentences)");
+                txtarea_instructions.setText(sentences);
+                Assembler assembler_obj = new Assembler();
+                memory[499] = "20";
+                int start_loc = 500;
+                for (char c: sentences.toCharArray())
+                {
+                        memory[start_loc + sentences_len] = assembler_obj.binToHex(assembler_obj.decToBin16((int)c));
+                        sentences_len += 1;
+                }
+        }
+        
+        private void get_word(){
+                word = JOptionPane.showInputDialog(this, "Enter the word to be searched");
+                Assembler assembler_obj = new Assembler();
+                int start_loc = 4000;
+                for (char c: word.toCharArray())
+                {
+                        memory[start_loc + word_len] = assembler_obj.binToHex(assembler_obj.decToBin16((int)c));
+                        word_len += 1;
+                }
+        }
+        
+        private void search_word(){
+            int current_sentence = 1;
+            int word_number = 1;
+            int found = 0;
+            String[] sentence_ends = new String[] {"2e", "3f", "21"};
+            
+            int temp = 0;
+            for(int i=0; i<sentences_len; i++)
+            {
+                if(Arrays.stream(sentence_ends).anyMatch(memory[500+i]::equals))
+                {
+                    current_sentence += 1;
+                    word_number = 0;
+                }
+
+                if(memory[500+i].equals("20"))
+                {
+                    word_number += 1;
+                }
+                
+                if((memory[500+i-1].equals("20")) && (memory[500+i].equals(memory[4000])))
+                {
+                    int remaining_word_len = word_len;
+                    int flag = 1;
+                    while(remaining_word_len>0)
+                    {
+                        if(!memory[500+i+word_len-remaining_word_len].equals(memory[4000+word_len-remaining_word_len]))
+                        {
+                            flag = 0;
+                            break;
+                        }
+                        remaining_word_len -= 1;
+                    }
+                    
+                    if(flag==1)
+                    {
+                        if((memory[500+i+word_len] == null) || (memory[500+i+word_len] != null && memory[500+i+word_len].equals("20")))
+                        {
+                            JOptionPane.showMessageDialog(this, "Word is: "+word+"\nSentence number is: "+current_sentence+
+                                    "\nWord number in the sentence is: "+word_number);
+                            found = 1;
+                            break;
+
+                        }
+                    }
+                }
+            }
+            
+            if(found==0)
+            {
+                JOptionPane.showMessageDialog(this, "Unable to find matching word");
+            }
+        }
 
 	public void setTblCache() {
 		try {
@@ -792,6 +888,22 @@ public class Simulator extends javax.swing.JFrame {
                         txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
 				+ assembler_obj.binToHex(instruction.substring(12)) + "," + assembler_obj.binToHex(instruction.substring(8, 9)) 
                                 +"," + assembler_obj.binToHex(instruction.substring(8, 9)));
+			break;
+                case "TRAP": // 36
+                        txtarea_instructions.setText("Test");
+                        if(Reg.equals("00"))
+                        {
+                            read_sentences();
+                        } 
+                        else if (Reg.equals("01"))
+                        {
+                            get_word();
+                        }
+                        else if (Reg.equals("10"))
+                        {
+                            search_word();
+                        }
+                        txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)));
 			break;
 		case "IN": // 61
 			// input from GUI to register
