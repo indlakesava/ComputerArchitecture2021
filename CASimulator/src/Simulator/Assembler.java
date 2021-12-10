@@ -11,6 +11,7 @@ import java.math.BigInteger;
  * @author indla
  */
 public class Assembler {
+        //Encoding the Opcodes to 6 bits.
 	private String encodeOpcode(String s) {
 		// Encodes the instruction in the opcode
 		String encoded_opcode = "";
@@ -100,12 +101,14 @@ public class Assembler {
 			encoded_opcode = "111110"; // 62
 			break;
 		default:
+                        Simulator.MFR = "0100";
 			System.out.println("Invalid Instruction");
 		}
 		return encoded_opcode;
 	}
 
-	public String decodeOpcode(String s) {
+        //decoding the Opcodes.
+        public String decodeOpcode(String s) {
 		// Decodes opcode to instruction
 		String decoded_opcode = "";
 		switch (s) {
@@ -199,6 +202,7 @@ public class Assembler {
 		return decoded_opcode;
 	}
 
+        //Convert Hexadecimal to Binary of 16 bits
 	public String hexToBin16(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Also appends zeroes to make it 16 bit
@@ -220,6 +224,7 @@ public class Assembler {
 		return sb.toString();
 	}
 
+        //Convert Hexadecimal to Binary of 5 bits
 	public String hexToBin5(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Also appends zeroes to make it 5 bit
@@ -241,6 +246,7 @@ public class Assembler {
 		return sb.toString();
 	}
 
+        //Convert Binary to Hexadecimal
 	public String binToHex(String s) {
 		// Converts Binary value to Hexadecimal format
 		int decimal = Integer.parseInt(s, 2);
@@ -250,6 +256,7 @@ public class Assembler {
 		return hexStr;
 	}
 
+        //Convert Hexadecimal to Binary
 	public String hexToBin(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Doen't append zeroes to make it 16 bit. Returns as it is.
@@ -259,26 +266,31 @@ public class Assembler {
 		return new BigInteger(s, 16).toString(2);
 	}
 
+        //Convert Hexadecimal to decimal
 	public int hexToDec(String s) {
 		// Converts Hexadecimal value to decimal format
 		return Integer.parseInt(s, 16);
 	}
 
+        //Convert Decimal to Hexadecimal
 	public String decToHex(int i) {
 		// Converts Decimal to Hexadecimal format
 		return Integer.toHexString(i);
 	}
 
+        //Convert Binary to Decimal
 	public int binToDec(String s) {
 		// Converts Binary value to Decimal format
 		return Integer.parseInt(s, 2);
 	}
 
+        //Convert Decimal to Binary 
 	public String decToBin(int i) {
 		// Converts Decimal value to Binary format
 		return Integer.toString(i, 2);
 	}
         
+        //Convert Decimal to Binary of 16 bits
         public String decToBin16(int i) {
 		// Converts decimal value to Binary format
 		// Also appends zeroes to make it 16 bit
@@ -296,6 +308,7 @@ public class Assembler {
 		return sb.toString();
 	}
 
+        //Convert Decimal to Binary of 32 bits
 	public String decToBin32(int i) {
 		String bin = Integer.toString(i, 2);
 		if (bin.length() == 32) {
@@ -309,6 +322,7 @@ public class Assembler {
 		return sb.toString();
 	}
 
+        //Encoding the Instruction
 	public String instructionToWord(String op, String rem) {
 		// Encodes instruction to word(2 bytes) data
 		String instructionWord = "";
@@ -317,6 +331,7 @@ public class Assembler {
 		return binToHex(opcode + R_IX_I_Add);
 	}
 
+        //Encoding the register
 	private String encode_reg(String s_reg) {
 		int reg = Integer.parseInt(s_reg);
 		if (reg == 0) {
@@ -332,7 +347,24 @@ public class Assembler {
 			return "";
 		}
 	}
+        
+        //Encoding the trap register
+	private String encode_trp(String s_trp) {
+		int trp = Integer.parseInt(s_trp);
+		if (trp == 0) {
+			return "00";
+		} else if (trp == 1) {
+			return "01";
+		} else if (trp == 2) {
+			return "10";
+		} else {
+                        Simulator.MFR = "0010";
+			Simulator.error = "Invalid Register";
+			return "";
+		}
+	}
 
+        //Decoding the register
 	public String get_reg_val(String bin_reg) {
 
 		if (bin_reg.equals("00")) {
@@ -349,6 +381,7 @@ public class Assembler {
 
 	}
 
+        //Setting register value after multiplication
 	public void set_reg_val_MLT(String bin_reg, int result) {
 		int reg = Integer.parseInt(bin_reg, 2);
 		int overflow = 0;
@@ -371,6 +404,7 @@ public class Assembler {
 		}
 	}
 
+        //Setting register value after division
 	public void set_reg_val_DVD(String bin_reg, int rx, int ry) {
 		int reg = Integer.parseInt(bin_reg, 2);
 		int DIVZERO = 0;
@@ -389,6 +423,7 @@ public class Assembler {
 		}
 	}
 
+        //Setting register value
 	public void output_to_reg(String reg, String result) {
 		if (reg.equals("00")) {
 			Simulator.R0 = result;
@@ -401,6 +436,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding Index registers
 	private String encode_ix(String s_ix) {
 		int ix = Integer.parseInt(s_ix);
 		if (ix == 0) {
@@ -417,6 +453,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding Inidrect addressing
 	private String encode_i(String s_I) {
 		int I = Integer.parseInt(s_I);
 		if (I == 0) {
@@ -429,6 +466,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding the address
 	private String encode_address(String add) {
 		String add_bin = hexToBin(add);
 		if (add_bin.length() == 5) {
@@ -446,6 +484,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding the Count value
 	private String encode_count(String count) {
 		String Count = decToBin(Integer.parseInt(count));
 		switch (Count.length()){
@@ -460,16 +499,19 @@ public class Assembler {
 		}
 	}
 
+        //Encoding the AL value
 	private String encode_AL(String AL) {
 		String al = decToBin(Integer.parseInt(AL));
 		return al;
 	}
 
+        //Encoding the LR value
 	private String encode_LR(String LR) {
 		String lr = decToBin(Integer.parseInt(LR));
 		return lr;
 	}
 
+        //Encoding the Register, Index register, Immediate register, and address
 	private String encode_R_IX_I_Add(String s, String operation) {
 		// Encodes General Purpose Register, Index register, Indirect addressing,
 		// Addressing to bits
@@ -671,7 +713,7 @@ public class Assembler {
 			bin.append("00");
 			bin.append(encode_count(splitted[1]));
 		}else if(operation.equals("TRAP")) {
-			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_trp(splitted[0]));
 			bin.append("00000000");
                 }else if(operation.equals("IN")) {
 			bin.append(encode_reg(splitted[0]));

@@ -53,6 +53,7 @@ public class Simulator extends javax.swing.JFrame {
 	DefaultTableModel memory_model;
 	DefaultTableModel cache_model;
 
+        //constructor
 	public Simulator() {
 		initComponents();
 		memory_model = (DefaultTableModel) tblMemory.getModel();
@@ -63,6 +64,7 @@ public class Simulator extends javax.swing.JFrame {
                 setTrap();
 	}
 
+        //Loads all the components when simulator is started
 	private void loadComponents() {
 		txtPC.setEditable(false);
 		txtR0.setEditable(false);
@@ -87,6 +89,7 @@ public class Simulator extends javax.swing.JFrame {
 		txtPC.setText(PC);
 	}
 
+        //This method sets the table memory to display the memory interms of table in the Simulator
 	private void setTblMemory() {
 		try {
 			Assembler assembler_obj = new Assembler();
@@ -104,10 +107,12 @@ public class Simulator extends javax.swing.JFrame {
 		}
 	}
         
+        //Declaring Trap enums with method names 
         private enum Trap {
             read_sentences, get_word, search_word
         }
         
+        //Initializing the Trap details
         private void setTrap()
         {
                 Assembler assembler_obj = new Assembler();
@@ -117,6 +122,7 @@ public class Simulator extends javax.swing.JFrame {
                 Simulator.memory[452] = assembler_obj.binToHex(assembler_obj.decToBin16(Trap.search_word.ordinal()));
         }
         
+        //First trap method that is used to read 6 sentences
         private void read_sentences(){
                 String sentences = JOptionPane.showInputDialog(this, "Enter the paragraph (6 sentences)");
                 txtarea_instructions.setText(sentences);
@@ -130,6 +136,7 @@ public class Simulator extends javax.swing.JFrame {
                 }
         }
         
+        //Second trap method that is used to read 1 word
         private void get_word(){
                 word = JOptionPane.showInputDialog(this, "Enter the word to be searched");
                 Assembler assembler_obj = new Assembler();
@@ -141,6 +148,7 @@ public class Simulator extends javax.swing.JFrame {
                 }
         }
         
+        //Third trap method that is used to search the word in the sentences
         private void search_word(){
             int current_sentence = 1;
             int word_number = 1;
@@ -195,6 +203,7 @@ public class Simulator extends javax.swing.JFrame {
             }
         }
 
+        //This method sets the table cache to display the cache interms of table in the Simulator
 	public void setTblCache() {
 		try {
 			Assembler assembler_obj = new Assembler();
@@ -212,6 +221,7 @@ public class Simulator extends javax.swing.JFrame {
 		}
 	}
 
+        //Method which rund on each cycle
 	private void cycle() {
 		// Method that keeps track of PC, MAR, MBR, IR and passes instruction further if
 		// we didn't reach the end of instruction set
@@ -241,14 +251,17 @@ public class Simulator extends javax.swing.JFrame {
 		}
 	}
         
+        //This method updates registers values in the simulator
 	public void update_registers(){
 		txtR0.setText(R0);
 		txtR1.setText(R1);
 		txtR2.setText(R2);
 		txtR3.setText(R3);
 		txtCC.setText(CC);
+                txtMFR.setText(MFR);
 	}
 
+        //Method which decode the instruction and runs its respective tasks.
 	private void single_instruction(String instruction) {
 		// Function that decodes the instruction and then runs that correspondng
 		// instruction
@@ -271,6 +284,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "JZ":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -295,6 +309,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "JNE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -342,6 +357,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "JMA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -356,6 +372,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "JSR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -379,6 +396,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "SOB":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -414,6 +432,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "JGE":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// PC
 			} else {
@@ -440,6 +459,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "AMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");
 			} else {
 				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
@@ -476,6 +496,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "SMR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");
 			} else {
 				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
@@ -572,6 +593,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "LDR":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");
 			} else {
 				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
@@ -597,6 +619,7 @@ public class Simulator extends javax.swing.JFrame {
 		case "LDA":
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");// Memory limit exceeds for EA to be assigned to
 																		// // PC
 			} else {
@@ -624,6 +647,7 @@ public class Simulator extends javax.swing.JFrame {
 				txtarea_instructions.setText("Index register can't be 0 in this case");
 			} else {
 				if (assembler_obj.hexToDec(EA) > 4095) {
+                                        MFR = "1000";
 					txtarea_instructions.setText("Memory limit exceeded");
 				} else {
 					mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
@@ -647,6 +671,7 @@ public class Simulator extends javax.swing.JFrame {
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
 			mem_loc = assembler_obj.hexToDec(EA);
 			if (mem_loc > 4095) {
+                                MFR = "1000";
 				txtarea_instructions.setText("Memory limit exceeded");
 			} else {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
@@ -669,6 +694,7 @@ public class Simulator extends javax.swing.JFrame {
 			} else {
 				mem_loc = assembler_obj.hexToDec(EA);
 				if (mem_loc > 4095) {
+                                        MFR = "1000";
 					txtarea_instructions.setText("Memory limit exceeded");
 				} else {
 					if (Integer.parseInt(IX) == java.lang.Integer.parseInt("01")) {
@@ -922,6 +948,7 @@ public class Simulator extends javax.swing.JFrame {
 		}
 	}
 
+        //This method is invoked when a LD button is clicked
 	private void LD_operation(String reg) {
 		int flag = 1;
 
