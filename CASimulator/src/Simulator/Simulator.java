@@ -830,7 +830,7 @@ public class Simulator extends javax.swing.JFrame {
 				// logically
 				if (LR_SRC == 1) {
 					// logically left
-                                        reg_val = content_SRC.substring(count_SRC) + Zeroes.substring(0, count_SRC);
+                	reg_val = content_SRC.substring(count_SRC) + Zeroes.substring(0, count_SRC);
 					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// logically right
@@ -869,35 +869,15 @@ public class Simulator extends javax.swing.JFrame {
 			if (count_RRC == 0 || count_RRC > 15) {
 				break;
 			}
-			//char[] rev = new char[count_RRC];
-			//char[] temp_RRC = content_RRC.toCharArray();
+
 			if (AL_RRC == 1) {
 				// logically
 				if (LR_RRC == 1) {
 					// logically left
-					/*for (int i = 0; i <= 15 - count_RRC; i++) {
-						if (i < count_RRC) {
-							rev[i] = temp_RRC[i];
-						}
-						temp_RRC[i] = temp_RRC[i + count_RRC];
-					}
-					for (int j = 0; j < count_RRC; j++) {
-						temp_RRC[15 - j] = rev[count_RRC - 1 - j];
-					}*/
-                                        reg_val = content_RRC.substring(count_RRC) + content_RRC.substring(0, count_RRC);
+					reg_val = content_RRC.substring(count_RRC) + content_RRC.substring(0, count_RRC);
 					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// logically right
-                                        /*
-					for (int i = 15; i >= count_RRC; i--) {
-						if (15 - i < count_RRC) {
-							rev[count_RRC - 16 + i] = temp_RRC[i];
-						}
-						temp_RRC[i] = temp_RRC[i - count_RRC];
-					}
-					for (int j = 0; j < count_RRC; j++) {
-						temp_RRC[j] = rev[j];
-					}*/
 					reg_val = content_RRC.substring(16-count_RRC) + content_RRC.substring(0,16-count_RRC);
 					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				}
@@ -905,31 +885,10 @@ public class Simulator extends javax.swing.JFrame {
 				// arithetically
 				if (LR_RRC == 1) {
 					// arithetically left
-                                        /*
-					for (int i = 1; i <= 15 - count_RRC; i++) {
-						if (i - 1 < count_RRC) {
-							rev[i - 1] = temp_RRC[i];
-						}
-						temp_RRC[i] = temp_RRC[i + count_RRC];
-					}
-					for (int j = 0; j < count_RRC; j++) {
-						temp_RRC[15 - j] = rev[count_RRC - 1 - j];
-					}
-                                        */
 					reg_val = content_RRC.substring(0, 1) + content_RRC.substring(1+count_RRC) + content_RRC.substring(1, 1+count_RRC);
 					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				} else {
 					// arithetically right
-                                        /*
-					for (int i = 15; i >= count_RRC; i--) {
-						if (15 - i < count_RRC) {
-							rev[count_RRC - 16 + i] = temp_RRC[i];
-						}
-						temp_RRC[i] = temp_RRC[i - count_RRC];
-					}
-					for (int j = 1; j < count_RRC; j++) {
-						temp_RRC[j] = rev[j - 1];
-					}*/
 					reg_val = content_RRC.substring(0, 1) + content_RRC.substring(16-count_RRC) + content_RRC.substring(1,16-count_RRC);
 					assembler_obj.output_to_reg(instruction.substring(6, 8), reg_val);
 				}
@@ -939,32 +898,32 @@ public class Simulator extends javax.swing.JFrame {
 				+ assembler_obj.binToHex(instruction.substring(12)) + "," + assembler_obj.binToHex(instruction.substring(8, 9)) 
                                 +"," + assembler_obj.binToHex(instruction.substring(8, 9)));
 			break;
-                case "TRAP": // 36
-                        txtarea_instructions.setText("Test");
-                        if(Reg.equals("00"))
-                        {
-                            read_sentences();
-                        } 
-                        else if (Reg.equals("01"))
-                        {
-                            get_word();
-                        }
-                        else if (Reg.equals("10"))
-                        {
-                            search_word();
-                        }
-                        txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)));
+		case "TRAP": // 36
+			txtarea_instructions.setText("Test");
+			if(Reg.equals("00"))
+			{
+				read_sentences();
+			}
+			else if (Reg.equals("01"))
+			{
+				get_word();
+			}
+			else if (Reg.equals("10"))
+			{
+				search_word();
+			}
+			txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)));
 			break;
 		case "IN": // 61
 			// input from GUI to register
-                        String val = JOptionPane.showInputDialog(this, "Enter a Value");
-                        assembler_obj.output_to_reg(Reg, assembler_obj.decToBin16(Integer.parseInt(val)));
-                        txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)) + ",0");
+			String val = JOptionPane.showInputDialog(this, "Enter a Value");
+			assembler_obj.output_to_reg(Reg, assembler_obj.decToBin16(Integer.parseInt(val)));
+			txtarea_instructions.setText("Executed Instruction:\n"+ ins + " " + String.valueOf(assembler_obj.binToDec(Reg)) + ",0");
 			break;
 		case "OUT": // 62
 			// out put from register to GUI
-                        String content_OUT = assembler_obj.get_reg_val(instruction.substring(6, 8));
-                        //txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
+			String content_OUT = assembler_obj.get_reg_val(instruction.substring(6, 8));
+			//txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
 			JOptionPane.showMessageDialog(this, "Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
                         break;
 		case "FADD":
@@ -1111,6 +1070,49 @@ public class Simulator extends javax.swing.JFrame {
 			}
                         txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
 				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
+		case "VADD": //opcode(6bit)+fr(2bit)+IX(2bit)+I(1bit)+Address(5bit)
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			float cofFR_VADD = 0;
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				//cOfFR = FR0.realFP; float
+				cofFR_VADD = (float) 3.1;
+			} else  {
+				//cOfFR = FR1.realFP;
+				cofFR_VADD = (float) 2.0;
+			}
+			int vector1_VADD = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(EA))); //vector1 start point
+			String vector2_VADD_EA = assembler_obj.decToHex(assembler_obj.hexToDec(EA)+1);
+			int vector2_VADD = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(vector2_VADD_EA))); //vector2 start point
+			for(int i=0; i < cofFR_VADD ; i++){
+				int number1 = assembler_obj.binToDec(cache_obj.get_memory(vector1_VADD + i));
+				int number2 = assembler_obj.binToDec(cache_obj.get_memory(vector2_VADD + i));
+				int result = number1 + number2;
+				String bin_result = assembler_obj.decToBin32(result);
+				cache_obj.set_memory(vector1_VADD+i, assembler_obj.binToHex(bin_result));
+			}
+			break;
+
+		case "VSUB": //fr(2bit)+IX(2bit)+I(1bit)+Address(5bit)
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			float cofFR_VSUB = 0;
+			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+				//cOfFR = FR0.realFP; float
+				cofFR_VSUB = (float) 3.1;
+			} else  {
+				//cOfFR = FR1.realFP;
+				cofFR_VSUB = (float) 2.0;
+			}
+			int vector1_VSUB = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(EA))); //vector1 start point
+			String vector2_VSUB_EA = assembler_obj.decToHex(assembler_obj.hexToDec(EA)+1);
+			int vector2_VSUB = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(vector2_VSUB_EA))); //vector2 start point
+			for(int i=0; i < cofFR_VSUB ; i++){
+				int number1 = assembler_obj.binToDec(cache_obj.get_memory(vector1_VSUB + i));
+				int number2 = assembler_obj.binToDec(cache_obj.get_memory(vector2_VSUB + i));
+				int result = number1 - number2;
+				String bin_result = assembler_obj.decToBin32(result);
+				cache_obj.set_memory(vector1_VSUB+i, assembler_obj.binToHex(bin_result));
+			}
 			break;
 		default:
 			break;

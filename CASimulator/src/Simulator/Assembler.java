@@ -96,7 +96,7 @@ public class Assembler {
 		case "RRC":
 			encoded_opcode = "100000"; // 32
 			break;
-                case "TRAP":
+        case "TRAP":
 			encoded_opcode = "100100"; // 36
 			break;
 		case "IN":
@@ -120,6 +120,13 @@ public class Assembler {
 		case "STFR":
 			encoded_opcode = "110011"; // 51
 			break;
+		case "VADD":
+			encoded_opcode = "100110"; // 38
+			break;
+		case "VSUB":
+			encoded_opcode = "100111"; // 39
+			break;
+
 		default:
                         Simulator.MFR = "0100";
 			System.out.println("Invalid Instruction");
@@ -207,7 +214,7 @@ public class Assembler {
 		case "100000": // 32
 			decoded_opcode = "RRC";
 			break;
-                case "100100": // 36
+		case "100100": // 36
 			decoded_opcode = "TRAP"; 
 			break;
 		case "111101": // 61
@@ -230,6 +237,11 @@ public class Assembler {
 			break;
 		case "110011"://51
 			decoded_opcode = "STFR";
+		case "100110": // 38
+			decoded_opcode = "VADD";
+			break;
+		case "100111": // 39
+			decoded_opcode = "VSUB";
 			break;
 		default:
 			System.out.println("Invalid code");
@@ -874,6 +886,26 @@ return Integer.toHexString(Float.floatToIntBits(f));
 		}else if(operation.equals("OUT")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append("00000000");
+		}else if(operation.equals("VADD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}else if(operation.equals("VSUB")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		}
 		else if (operation.equals("FADD")) {
 			bin.append(encode_reg(splitted[0]));
