@@ -458,6 +458,7 @@ return Integer.toHexString(Float.floatToIntBits(f));
         public String decToBin16(int i) {
 		// Converts decimal value to Binary format
 		// Also appends zeroes to make it 16 bit
+		i = Math.abs(i); 
 		String bin = Integer.toString(i, 2);
 		if (bin.length() == 16) {
 			return bin;

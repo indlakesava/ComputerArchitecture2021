@@ -1073,45 +1073,41 @@ public class Simulator extends javax.swing.JFrame {
 			break;
 		case "VADD": //opcode(6bit)+fr(2bit)+IX(2bit)+I(1bit)+Address(5bit)
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			float cOfFR = 0;
+			float cOfFR_VADD = 0;
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				cOfFR = FR0.realFP;
-//				cofFR_VADD = (float) 3.1;
+				cOfFR_VADD = FR0.realFP;
 			} else  {
-				cOfFR = FR1.realFP;
-//				cofFR_VADD = (float) 2.0;
+				cOfFR_VADD = FR1.realFP;
 			}
 			int vector1_VADD = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(EA))); //vector1 start point
 			String vector2_VADD_EA = assembler_obj.decToHex(assembler_obj.hexToDec(EA)+1);
 			int vector2_VADD = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(vector2_VADD_EA))); //vector2 start point
-			for(int i=0; i < cOfFR; i++){
-				int number1 = assembler_obj.binToDec(cache_obj.get_memory(vector1_VADD + i));
-				int number2 = assembler_obj.binToDec(cache_obj.get_memory(vector2_VADD + i));
+			for(int i=0; i < cOfFR_VADD; i++){
+				int number1 = assembler_obj.hexToDec(cache_obj.get_memory(assembler_obj.hexToDec(Integer.toString(vector1_VADD + i))));
+				int number2 = assembler_obj.hexToDec(cache_obj.get_memory(assembler_obj.hexToDec(Integer.toString(vector2_VADD + i))));
 				int result = number1 + number2;
-				String bin_result = assembler_obj.decToBin32(result);
-				cache_obj.set_memory(vector1_VADD+i, assembler_obj.binToHex(bin_result));
+				String bin_result = assembler_obj.decToBin16(result);
+				cache_obj.set_memory(assembler_obj.hexToDec(Integer.toString(vector1_VADD+i)), assembler_obj.binToHex(bin_result));
 			}
 			break;
 
 		case "VSUB": //fr(2bit)+IX(2bit)+I(1bit)+Address(5bit)
 			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
-			float cofFR_VSUB = 0;
+			float cOfFR_VSUB = 0;
 			if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
-				cofFR_VSUB = FR0.realFP; 
-//				cofFR_VSUB = (float) 3.1;
+				cOfFR_VSUB = FR0.realFP;
 			} else  {
-				cofFR_VSUB = FR1.realFP;
-//				cofFR_VSUB = (float) 2.0;
+				cOfFR_VSUB = FR1.realFP;
 			}
 			int vector1_VSUB = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(EA))); //vector1 start point
 			String vector2_VSUB_EA = assembler_obj.decToHex(assembler_obj.hexToDec(EA)+1);
 			int vector2_VSUB = Integer.parseInt(cache_obj.get_memory(assembler_obj.hexToDec(vector2_VSUB_EA))); //vector2 start point
-			for(int i=0; i < cofFR_VSUB ; i++){
-				int number1 = assembler_obj.binToDec(cache_obj.get_memory(vector1_VSUB + i));
-				int number2 = assembler_obj.binToDec(cache_obj.get_memory(vector2_VSUB + i));
+			for(int i=0; i < cOfFR_VSUB; i++){
+				int number1 = assembler_obj.hexToDec(cache_obj.get_memory(assembler_obj.hexToDec(Integer.toString(vector1_VSUB + i))));
+				int number2 = assembler_obj.hexToDec(cache_obj.get_memory(assembler_obj.hexToDec(Integer.toString(vector2_VSUB + i))));
 				int result = number1 - number2;
-				String bin_result = assembler_obj.decToBin32(result);
-				cache_obj.set_memory(vector1_VSUB+i, assembler_obj.binToHex(bin_result));
+				String bin_result = assembler_obj.decToBin16(result);
+				cache_obj.set_memory(assembler_obj.hexToDec(Integer.toString(vector1_VSUB+i)), assembler_obj.binToHex(bin_result));
 			}
 			break;
 		default:
