@@ -18,11 +18,29 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.util.Arrays;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JButton;
 
 /**
  *
  * @author indla
  */
+
+class FP{
+	float realFP; //contain real FP no. to perform add, sub
+	String FPR; //contain FP 16 bit string to show on simulator
+	public FP() {
+		realFP=0.0f;
+		FPR="0000000000000000";
+		
+	}
+}
+
+
 public class Simulator extends javax.swing.JFrame {
 
 	/**
@@ -45,6 +63,8 @@ public class Simulator extends javax.swing.JFrame {
 	public static String IR = "0000000000000000";
 	public static String MFR = "0000";
 	public static String CC = "0000";
+	public static FP FR0 = new FP();
+	public static FP FR1 = new FP();
         public String IN = "";
         private int sentences_len = 0;
         private int word_len = 0;
@@ -79,6 +99,8 @@ public class Simulator extends javax.swing.JFrame {
 		txtIR.setEditable(false);
 		txtMFR.setEditable(false);
 		txtCC.setEditable(false);
+		txtFR0.setEditable(false);
+		txtFR1.setEditable(false);
 		// txtOpCode.setEditable(false);
 		// txtGPR.setEditable(false);
 		// txtIXR12.setEditable(false);
@@ -258,12 +280,14 @@ public class Simulator extends javax.swing.JFrame {
 		txtR2.setText(R2);
 		txtR3.setText(R3);
 		txtCC.setText(CC);
-                txtMFR.setText(MFR);
+        txtMFR.setText(MFR);
+		txtFR0.setText(FR0.FPR);
+		txtFR1.setText(FR1.FPR);
 	}
 
         //Method which decode the instruction and runs its respective tasks.
 	private void single_instruction(String instruction) {
-		// Function that decodes the instruction and then runs that correspondng
+		// Function that decodes the instruction and then runs that correspondIng
 		// instruction
 		Assembler assembler_obj = new Assembler();
 		Cache cache_obj = new Cache();
@@ -378,7 +402,7 @@ public class Simulator extends javax.swing.JFrame {
 			} else {
 				res = assembler_obj.hexToBin16(EA);
 				R3 = assembler_obj.addBin(Simulator.PC, "1");
-				txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
+				R3 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				Simulator.PC = res;
 				txtPC.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(Simulator.PC)));
 			}
@@ -404,19 +428,19 @@ public class Simulator extends javax.swing.JFrame {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOr = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin16(cOr - 1);
-					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
+					R0 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOr = assembler_obj.binToDec(R1);
 					R1 = assembler_obj.decToBin16(cOr - 1);
-					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
+					R1 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOr = assembler_obj.binToDec(R2);
 					R2 = assembler_obj.decToBin16(cOr - 1);
-					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
+					R2 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOr = assembler_obj.binToDec(R3);
 					R3 = assembler_obj.decToBin16(cOr - 1);
-					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
+					R3 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 
 				if (cOr > 0) {
@@ -468,19 +492,19 @@ public class Simulator extends javax.swing.JFrame {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
+					R0 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOfR = assembler_obj.binToDec(R1);
 					R1 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
+					R1 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOfR = assembler_obj.binToDec(R2);
 					R2 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
+					R2 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOfR = assembler_obj.binToDec(R3);
 					R3 = assembler_obj.decToBin(cOfEA + cOfR);
-					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
+					R3 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 				if (cOfR<0)
 				   Simulator.CC = "01" + Simulator.CC.substring(2);
@@ -505,19 +529,19 @@ public class Simulator extends javax.swing.JFrame {
 				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
 					cOfR = assembler_obj.binToDec(R0);
 					R0 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR0.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
+					R0 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
 					cOfR = assembler_obj.binToDec(R1);
 					R1 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
+					R1 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
 					cOfR = assembler_obj.binToDec(R2);
 					R2 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
+					R2 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
 				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
 					cOfR = assembler_obj.binToDec(R3);
 					R3 = assembler_obj.decToBin(cOfR - cOfEA);
-					txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
+					R3 =(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
 				}
 				if (cOfR<0)
 					   Simulator.CC = "01" + Simulator.CC.substring(2);
@@ -943,6 +967,151 @@ public class Simulator extends javax.swing.JFrame {
                         //txtarea_instructions.setText("Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
 			JOptionPane.showMessageDialog(this, "Out Value Is: "+String.valueOf(assembler_obj.binToDec(content_OUT)));
                         break;
+		case "FADD":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
+				float cOfEA = assembler_obj.hexToFloat(mem);
+				float cOfFR=0.0f;
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					cOfFR = FR0.realFP;
+					cOfFR=cOfEA + cOfFR;
+					FR0.realFP = cOfFR;
+					FR0.FPR= assembler_obj.floatTo16bitString(FR0.realFP);
+					txtFR0.setText(FR0.FPR);
+				} else {
+					cOfFR = FR1.realFP;
+					cOfFR=cOfEA + cOfFR;
+					FR1.realFP = cOfFR;
+					FR1.FPR= assembler_obj.floatTo16bitString(FR1.realFP);
+					txtFR1.setText(FR1.FPR);
+				}
+				if (cOfFR<0)
+				   Simulator.CC = "01" + Simulator.CC.substring(2);
+				else if (cOfFR > 65535)
+				   Simulator.CC = "10"+Simulator.CC.substring(2);
+				else
+					Simulator.CC = "00"+Simulator.CC.substring(2);
+				update_registers();
+			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
+		case "FSUB":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
+				float cOfEA = assembler_obj.hexToFloat(mem);
+				float cOfFR=0.0f;
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					cOfFR = FR0.realFP;
+					cOfFR= cOfFR-cOfEA;
+					FR0.realFP = cOfFR;
+					FR0.FPR= assembler_obj.floatTo16bitString(FR0.realFP);
+					txtFR0.setText(FR0.FPR);
+				} else {
+					cOfFR = FR1.realFP;
+					cOfFR= cOfFR-cOfEA;
+					FR1.realFP = cOfFR;
+					FR1.FPR= assembler_obj.floatTo16bitString(FR1.realFP);
+					txtFR1.setText(FR1.FPR);
+				}
+				if (cOfFR<0)
+				   Simulator.CC = "01" + Simulator.CC.substring(2);
+				else if (cOfFR > 65535)
+				   Simulator.CC = "10"+Simulator.CC.substring(2);
+				else
+					Simulator.CC = "00"+Simulator.CC.substring(2);
+				update_registers();
+			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
+		case "LDFR":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
+				res = assembler_obj.floatTo16bitString(assembler_obj.hexToFloat(mem));
+
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					FR0.FPR = res;
+					FR0.realFP=assembler_obj.hexToFloat(mem);
+					txtFR0.setText(res);
+				} else {
+					FR1.FPR = res;
+					FR1.realFP=assembler_obj.hexToFloat(mem);
+					txtFR1.setText(res);
+				}
+			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
+		case "STFR":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			mem_loc = assembler_obj.hexToDec(EA);
+			if (mem_loc > 4095) {
+                                MFR = "1000";
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					cache_obj.set_memory(mem_loc, assembler_obj.floatToHex(FR0.realFP));
+				} else {
+					cache_obj.set_memory(mem_loc, assembler_obj.floatToHex(FR1.realFP));
+				}
+			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
+		case "CNVRT":
+			EA = assembler_obj.EffectiveAddress(instruction.substring(8, 16));
+			if (assembler_obj.hexToDec(EA) > 4095) {
+                                MFR = "1000";
+				txtarea_instructions.setText("Memory limit exceeded");
+			} else {
+				mem = cache_obj.get_memory(assembler_obj.hexToDec(EA));
+				cOfR=0;
+				if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+					cOfR = assembler_obj.binToDec(R0);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+					cOfR = assembler_obj.binToDec(R1);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+					cOfR = assembler_obj.binToDec(R2);
+				} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+					cOfR = assembler_obj.binToDec(R3);
+				}
+				if (cOfR==1) {
+					FR0.realFP = (float)assembler_obj.hexToDec(mem);
+					FR0.FPR= assembler_obj.floatTo16bitString(FR0.realFP);
+					txtFR0.setText(FR0.FPR);
+				} else {
+					cOfR = (int)assembler_obj.hexToFloat(mem);
+					if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("00")) {
+						R0 = assembler_obj.decToBin(cOfR);
+						R0=(assembler_obj.hexToBin16(assembler_obj.binToHex(R0)));
+					} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("01")) {
+						R1 = assembler_obj.decToBin(cOfR);
+						txtR1.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R1)));
+					} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("10")) {
+						R2 = assembler_obj.decToBin(cOfR);
+						txtR2.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R2)));
+					} else if (Integer.parseInt(Reg) == java.lang.Integer.parseInt("11")) {
+						R3 = assembler_obj.decToBin(cOfR);
+						txtR3.setText(assembler_obj.hexToBin16(assembler_obj.binToHex(R3)));
+					}
+				}
+			}
+                        txtarea_instructions.setText("Executed Instruction:\n" + ins + " " + assembler_obj.binToHex(Reg) + ","
+				+ assembler_obj.binToHex(IX) + "," + Indirect + "," + assembler_obj.binToHex(Add));
+			break;
 		default:
 			break;
 		}
@@ -1011,6 +1180,14 @@ public class Simulator extends javax.swing.JFrame {
 				txtMBR.setText(bin.toString());
 				MBR = bin.toString();
 				break;
+			case "FR0":
+				txtFR0.setText(bin.toString());
+				FR0.FPR = bin.toString();
+				break;
+			case "FR1":
+				txtFR1.setText(bin.toString());
+				FR1.FPR = bin.toString();
+				break;
 			}
 		} else {
 			txtarea_instructions
@@ -1041,7 +1218,8 @@ public class Simulator extends javax.swing.JFrame {
         lblMBR = new javax.swing.JLabel();
         lblIR = new javax.swing.JLabel();
         lblMFR = new javax.swing.JLabel();
-        lblF = new javax.swing.JLabel();
+        lblFR0 = new javax.swing.JLabel();
+        lblFR1 = new javax.swing.JLabel();
         txtR0 = new javax.swing.JTextField();
         txtR1 = new javax.swing.JTextField();
         txtR2 = new javax.swing.JTextField();
@@ -1053,7 +1231,9 @@ public class Simulator extends javax.swing.JFrame {
         txtMAR = new javax.swing.JTextField();
         txtMBR = new javax.swing.JTextField();
         txtIR = new javax.swing.JTextField();
-        txtMFR = new javax.swing.JTextField();
+        txtMFR = new javax.swing.JTextField();        
+        txtFR0 = new javax.swing.JTextField();        
+        txtFR1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtarea_instructions = new javax.swing.JTextArea();
         btn_IPL = new javax.swing.JButton();
@@ -1070,17 +1250,6 @@ public class Simulator extends javax.swing.JFrame {
         txtGPR = new javax.swing.JTextField();
         txtIndirect = new javax.swing.JTextField();
         txtAddress = new javax.swing.JTextField();
-        lblD = new javax.swing.JLabel();
-        lblA = new javax.swing.JLabel();
-        lblI = new javax.swing.JLabel();
-        lblX = new javax.swing.JLabel();
-        lblW = new javax.swing.JLabel();
-        txtF = new javax.swing.JTextField();
-        txtD = new javax.swing.JTextField();
-        txtA = new javax.swing.JTextField();
-        txtI = new javax.swing.JTextField();
-        txtX = new javax.swing.JTextField();
-        txtW = new javax.swing.JTextField();
         txtIXR12 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMemory = new javax.swing.JTable();
@@ -1091,6 +1260,9 @@ public class Simulator extends javax.swing.JFrame {
         btn_LD_PC = new javax.swing.JButton();
         btn_LD_MAR = new javax.swing.JButton();
         btn_LD_MBR = new javax.swing.JButton();
+        btn_LD_FR0 = new javax.swing.JButton();
+        btn_LD_FR1 = new javax.swing.JButton();
+
         lblCC = new javax.swing.JLabel();
         txtCC = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -1135,8 +1307,11 @@ public class Simulator extends javax.swing.JFrame {
         lblMFR.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblMFR.setText("MFR");
 
-        lblF.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblF.setText("F");
+        lblFR0.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblFR0.setText("FR0");
+
+        lblFR1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblFR1.setText("FR1");
 
         txtR0.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtR0.setText("0000000000000000");
@@ -1173,6 +1348,13 @@ public class Simulator extends javax.swing.JFrame {
 
         txtMFR.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMFR.setText("0000");
+        
+        txtFR0.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtFR0.setText("0000000000000000");
+
+        txtFR1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtFR1.setText("0000000000000000");
+        
 
         txtarea_instructions.setColumns(20);
         txtarea_instructions.setLineWrap(true);
@@ -1247,39 +1429,6 @@ public class Simulator extends javax.swing.JFrame {
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtAddress.setText("00000");
 
-        lblD.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblD.setText("D");
-
-        lblA.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblA.setText("A");
-
-        lblI.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblI.setText("I");
-
-        lblX.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblX.setText("X");
-
-        lblW.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblW.setText("W");
-
-        txtF.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtF.setText("0");
-
-        txtD.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtD.setText("0");
-
-        txtA.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtA.setText("0");
-
-        txtI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtI.setText("0");
-
-        txtX.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtX.setText("0");
-
-        txtW.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtW.setText("0");
-
         txtIXR12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtIXR12.setText("00");
 
@@ -1342,6 +1491,23 @@ public class Simulator extends javax.swing.JFrame {
             }
         });
 
+        btn_LD_FR0.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_LD_FR0.setText("LD");
+        btn_LD_FR0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LD_FR0ActionPerformed(evt);
+            }
+        });
+
+        btn_LD_FR1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_LD_FR1.setText("LD");
+        btn_LD_FR1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LD_FR1ActionPerformed(evt);
+            }
+        });
+
+
         btn_LD_PC.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_LD_PC.setText("LD");
         btn_LD_PC.addActionListener(new java.awt.event.ActionListener() {
@@ -1399,259 +1565,237 @@ public class Simulator extends javax.swing.JFrame {
         tblCache.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(tblCache);
 
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblPC, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtPC, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_PC))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblIXR3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIXR3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblIXR2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIXR2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblR2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtR2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_R2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblR1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtR1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_R1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblR4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtR3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_R3))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblIXR1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIXR1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblR0, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtR0, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_R0))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblMAR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtMAR, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_MAR)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_Run, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_IPL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_SI, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Store, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Load, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblOpcode)
-                                .addGap(26, 26, 26)
-                                .addComponent(lblGPR)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblIXR)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblImmediate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblI1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblMBR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtMBR, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_LD_MBR))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblIR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtIR, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblMFR, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(20, 20, 20)
-                                    .addComponent(txtMFR, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(txtOpCode, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtGPR, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtIXR12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtIndirect, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(76, 76, 76)
-                                    .addComponent(lblA)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(lblI)
-                                    .addGap(30, 30, 30)
-                                    .addComponent(txtX, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblW, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(36, 36, 36)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtF, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblF))
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtD, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtA, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtI, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblD))
-                                .addGap(10, 10, 10)
-                                .addComponent(lblX, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCC, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtCC, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3)))
-                .addContainerGap())
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(layout.createSequentialGroup()
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblPC, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtPC, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_PC))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblIXR3, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtIXR3, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblIXR2, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtIXR2, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblR2, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtR2, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_R2))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblR1, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtR1, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_R1))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblR4, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtR3, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_R3))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblIXR1, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtIXR1, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblR0, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtR0, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_R0))
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(lblMAR, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(txtMAR, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(btn_LD_MAR)))
+        					.addGap(18)
+        					.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 297, GroupLayout.PREFERRED_SIZE)
+        					.addGap(18)
+        					.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 327, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(btn_Run, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_IPL, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_SI, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_Store, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_Load, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)))
+        				.addGroup(layout.createSequentialGroup()
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        							.addGroup(layout.createSequentialGroup()
+        								.addComponent(lblMBR, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        								.addGap(18)
+        								.addComponent(txtMBR, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        								.addPreferredGap(ComponentPlacement.RELATED)
+        								.addComponent(btn_LD_MBR))
+        							.addGroup(layout.createSequentialGroup()
+        								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        									.addComponent(lblIR, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        									.addComponent(lblCC, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        									.addComponent(lblFR0)
+        									.addComponent(lblMFR, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        									.addComponent(txtOpCode, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+        									.addComponent(lblOpcode))
+        								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        									.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        											.addGroup(layout.createSequentialGroup()
+        												.addGap(10)
+        												.addComponent(txtGPR, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.RELATED)
+        												.addComponent(txtIXR12, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.UNRELATED)
+        												.addComponent(txtIndirect, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.UNRELATED)
+        												.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE))
+        											.addGroup(layout.createSequentialGroup()
+        												.addGap(8)
+        												.addComponent(lblGPR)
+        												.addPreferredGap(ComponentPlacement.RELATED)
+        												.addComponent(lblIXR)
+        												.addPreferredGap(ComponentPlacement.UNRELATED)
+        												.addComponent(lblImmediate, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.UNRELATED)
+        												.addComponent(lblI1))
+        											.addGroup(layout.createSequentialGroup()
+        												.addComponent(txtFR0, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.RELATED)
+        												.addComponent(btn_LD_FR0, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+        											.addGroup(layout.createSequentialGroup()
+        												.addComponent(txtFR1, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+        												.addPreferredGap(ComponentPlacement.RELATED)
+        												.addComponent(btn_LD_FR1, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+        											.addComponent(txtIR, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+        										.addComponent(txtCC, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+        									.addComponent(txtMFR, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))))
+        						.addComponent(lblFR1))
+        					.addGap(18)
+        					.addComponent(jScrollPane3, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)))
+        			.addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblR0)
-                            .addComponent(txtR0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_LD_R0))
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblR1)
-                            .addComponent(txtR1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_LD_R1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblR2)
-                            .addComponent(txtR2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_LD_R2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblR4)
-                            .addComponent(txtR3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_LD_R3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtIXR1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblIXR1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblIXR2)
-                            .addComponent(txtIXR2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblIXR3)
-                            .addComponent(txtIXR3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPC)
-                            .addComponent(btn_LD_PC))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMAR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMAR)
-                            .addComponent(btn_LD_MAR))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMBR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMBR)
-                            .addComponent(btn_LD_MBR))
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblIR))
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMFR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMFR))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCC)
-                            .addComponent(txtCC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblF)
-                            .addComponent(lblA)
-                            .addComponent(lblI)
-                            .addComponent(lblX)
-                            .addComponent(lblW)
-                            .addComponent(lblD))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblI1)
-                            .addComponent(lblImmediate)
-                            .addComponent(lblIXR)
-                            .addComponent(lblGPR)
-                            .addComponent(lblOpcode))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtOpCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGPR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIXR12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIndirect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_IPL, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_SI, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_Load, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_Store, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(layout.createSequentialGroup()
+        			.addGap(16)
+        			.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(layout.createSequentialGroup()
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblR0)
+        						.addComponent(txtR0, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_LD_R0))
+        					.addGap(7)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblR1)
+        						.addComponent(txtR1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_LD_R1))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblR2)
+        						.addComponent(txtR2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_LD_R2))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblR4)
+        						.addComponent(txtR3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_LD_R3))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtIXR1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(lblIXR1))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblIXR2)
+        						.addComponent(txtIXR2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        					.addGap(11)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblIXR3)
+        						.addComponent(txtIXR3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        					.addGap(14)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(txtPC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(lblPC)
+        						.addComponent(btn_LD_PC))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(txtMAR, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(lblMAR)
+        						.addComponent(btn_LD_MAR))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(txtMBR, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(lblMBR)
+        						.addComponent(btn_LD_MBR))
+        					.addGap(0, 6, Short.MAX_VALUE)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(txtIR, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(lblIR))
+        					.addGap(11)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblMFR)
+        						.addComponent(txtMFR, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblCC)
+        						.addComponent(txtCC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblFR0)
+        						.addComponent(txtFR0, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btn_LD_FR0, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+        						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        							.addComponent(lblFR1)
+        							.addComponent(txtFR1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+        						.addComponent(btn_LD_FR1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblOpcode)
+        						.addComponent(lblGPR)
+        						.addComponent(lblIXR)
+        						.addComponent(lblImmediate)
+        						.addComponent(lblI1))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(txtOpCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(txtGPR, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(txtIXR12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(txtIndirect, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+        				.addGroup(layout.createSequentialGroup()
+        					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        						.addGroup(layout.createSequentialGroup()
+        							.addComponent(btn_IPL, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(btn_SI, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(btn_Run, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(btn_Load, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(btn_Store, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+        							.addGap(0, 21, Short.MAX_VALUE)))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(jScrollPane3, GroupLayout.PREFERRED_SIZE, 238, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
+        getContentPane().setLayout(layout);
 
         btn_IPL.getAccessibleContext().setAccessibleName("");
         btn_SI.getAccessibleContext().setAccessibleName("");
@@ -1741,6 +1885,16 @@ public class Simulator extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		LD_operation("MBR");
 	}// GEN-LAST:event_btn_LD_MBRActionPerformed
+	
+	private void btn_LD_FR0ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_LD_R0ActionPerformed
+		// TODO add your handling code here:
+		LD_operation("FR0");
+	}// GEN-LAST:event_btn_LD_FR0ActionPerformed
+	
+	private void btn_LD_FR1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_LD_R0ActionPerformed
+		// TODO add your handling code here:
+		LD_operation("FR1");
+	}// GEN-LAST:event_btn_LD_FR1ActionPerformed
 
 	private void btn_StoreActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btn_StoreActionPerformed
 		// TODO add your handling code here:
@@ -1810,6 +1964,8 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JButton btn_LD_R1;
     private javax.swing.JButton btn_LD_R2;
     private javax.swing.JButton btn_LD_R3;
+    private javax.swing.JButton btn_LD_FR0;
+    private javax.swing.JButton btn_LD_FR1;
     private javax.swing.JButton btn_Load;
     private javax.swing.JButton btn_Run;
     private javax.swing.JButton btn_SI;
@@ -1817,12 +1973,9 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel lblA;
     private javax.swing.JLabel lblCC;
-    private javax.swing.JLabel lblD;
-    private javax.swing.JLabel lblF;
+    private javax.swing.JLabel lblFR0;
     private javax.swing.JLabel lblGPR;
-    private javax.swing.JLabel lblI;
     private javax.swing.JLabel lblI1;
     private javax.swing.JLabel lblIR;
     private javax.swing.JLabel lblIXR;
@@ -1839,17 +1992,12 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel lblR1;
     private javax.swing.JLabel lblR2;
     private javax.swing.JLabel lblR4;
-    private javax.swing.JLabel lblW;
-    private javax.swing.JLabel lblX;
+    private javax.swing.JLabel lblFR1;
     public javax.swing.JTable tblCache;
     private javax.swing.JTable tblMemory;
-    private javax.swing.JTextField txtA;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtCC;
-    private javax.swing.JTextField txtD;
-    private javax.swing.JTextField txtF;
     private javax.swing.JTextField txtGPR;
-    private javax.swing.JTextField txtI;
     private javax.swing.JTextField txtIR;
     private javax.swing.JTextField txtIXR1;
     private javax.swing.JTextField txtIXR12;
@@ -1865,8 +2013,8 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JTextField txtR1;
     private javax.swing.JTextField txtR2;
     private javax.swing.JTextField txtR3;
-    private javax.swing.JTextField txtW;
-    private javax.swing.JTextField txtX;
     private javax.swing.JTextArea txtarea_instructions;
+    private javax.swing.JTextField txtFR0;
+    private javax.swing.JTextField txtFR1;
     // End of variables declaration//GEN-END:variables
 }

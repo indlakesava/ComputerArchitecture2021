@@ -5,6 +5,11 @@
 package Simulator;
 
 import java.math.BigInteger;
+import java.util.BitSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+
 
 /**
  *
@@ -99,6 +104,21 @@ public class Assembler {
 			break;
 		case "OUT":
 			encoded_opcode = "111110"; // 62
+			break;
+		case "FADD":
+			encoded_opcode = "100001"; // 33
+			break;
+		case "FSUB":
+			encoded_opcode = "100010"; // 34
+			break;
+		case "CNVRT":
+			encoded_opcode = "100101"; // 37
+			break;
+		case "LDFR":
+			encoded_opcode = "110010"; // 50
+			break;
+		case "STFR":
+			encoded_opcode = "110011"; // 51
 			break;
 		default:
                         Simulator.MFR = "0100";
@@ -196,6 +216,21 @@ public class Assembler {
 		case "111110": // 62
 			decoded_opcode = "OUT";
 			break;
+		case "100001": //33
+			decoded_opcode = "FADD";
+			break;
+		case "100010"://34
+			decoded_opcode = "FSUB";
+			break;
+		case "100101"://37
+			decoded_opcode = "CNVRT";
+			break;
+		case "110010"://50
+			decoded_opcode = "LDFR";
+			break;
+		case "110011"://51
+			decoded_opcode = "STFR";
+			break;
 		default:
 			System.out.println("Invalid code");
 		}
@@ -223,6 +258,110 @@ public class Assembler {
 
 		return sb.toString();
 	}
+	
+	
+	//convert floating point to binary16 bit
+//	 public static final int FLOATING_POINT_BIT =16;
+	    public static final int EXPONENT_BIT =7;
+//	    public static final int MANTISSA_BIT =8;
+	    public static final int bias = (int)Math.pow(2,EXPONENT_BIT-1)-1;
+	public String floatTo16bitString(float value){
+		 StringBuilder ValueString32 = new StringBuilder(32);
+	        StringBuilder ValueString16 = new StringBuilder(16);
+
+	        int intBits = Float.floatToIntBits(value);
+	        ValueString32.append(Integer.toBinaryString(intBits));
+	        while(ValueString32.length()<32){
+	            ValueString32.insert(0,"0");
+	        }
+	        String FloatString = ValueString32.toString();
+
+	        ValueString16.append(FloatString.charAt(0));
+
+	        if(isAllZero(FloatString.substring(1,9))){
+	            ValueString16.append("0000000");
+	        }
+	        else if(isAllOne(FloatString.substring(1,9))){
+	            ValueString16.append("1111111");
+	        }
+	        else{
+	        int exponent = Integer.valueOf(FloatString.substring(1,9),2)-127;
+	        ValueString16.append(toBinaryString(exponent+bias,EXPONENT_BIT));
+	        }
+
+	        ValueString16.append(FloatString.substring(9,17));
+
+
+	        return ValueString16.toString();
+	}
+
+    /**
+     * Converts an integer to a binary string, and 0 pads up to the number
+     * of bits. For instance, calling toBinaryString(3, 6) will return 000011.
+     *
+     * @param value        A decimal number
+     * @param numberOfBits The bit of binary number
+     * @return The binary string representation
+     */
+    public static String toBinaryString(int value, int numberOfBits) {
+        BitSet bits = convert(value);
+        return toBinaryString(bits, numberOfBits);
+    }
+	 /**
+     * Convert an integer to a BitSet(16bits)
+     * Use complement code to show binary number
+     *
+     * @param value The integer to utils
+     * @return The converted BitSet
+     * @throws NumberFormatException we have 16 bits word, so the range is [-32768,32767],
+     *                      numbers that not in the range will throw NumberFormatException Exception
+     */
+    public static BitSet convert(int value) throws NumberFormatException {
+        if (value >= 0) {
+            //handle positive number
+            return BitSet.valueOf(new long[]{value});
+        } else if (value < 0) {
+            //handle negative number
+            BitSet bits;
+            value =  1 + value;
+            bits = BitSet.valueOf(new long[]{value});
+            bits.set(15);
+            return bits;
+        } else {
+            //we have 16 bits word, so the range is from -32768-32767
+            String mess = String.format("Value: %d is out of range", value);
+            throw new NumberFormatException(mess);
+        }
+    }
+    
+    /**
+     * Converts a bitset to a binary string representation using little endian.
+     * The size of the string returned varies on the size of the BitSet, therefore
+     * a bit set with the value of 7, and a max of 4 bits will return "0111".
+     *
+     * @param bits The BitSet to convert
+     * @return The binary string representation
+     */
+    public static String toBinaryString(BitSet bits, int numberOfBits) {
+        if (bits.isEmpty()) {
+            char[] empties = new char[numberOfBits];
+            return new String(empties).replace("\0", "0");
+        }
+        StringBuilder builder = new StringBuilder(numberOfBits);
+        IntStream.range(0, numberOfBits).mapToObj(i -> bits.get(i) ? '1' : '0').forEach(builder::append);
+        return builder.reverse().toString();
+    }
+	
+    private static boolean isAllZero(String s){
+        Pattern pattern = Pattern.compile("0*");
+        return pattern.matcher(s).matches();
+    }
+
+    private static boolean isAllOne(String s){
+        Pattern pattern = Pattern.compile("1*");
+        return pattern.matcher(s).matches();
+    }
+	
 
         //Convert Hexadecimal to Binary of 5 bits
 	public String hexToBin5(String s) {
@@ -272,6 +411,19 @@ public class Assembler {
 		return Integer.parseInt(s, 16);
 	}
 
+    //Convert hex to Float
+public float hexToFloat(String s) {
+	// Converts hex value to Float format
+	
+	Long i = Long.parseLong(s, 16);
+    return Float.intBitsToFloat(i.intValue());
+}
+
+//Convert Float to Hexadecimal
+public String floatToHex(float f) {
+return Integer.toHexString(Float.floatToIntBits(f));
+}
+	
         //Convert Decimal to Hexadecimal
 	public String decToHex(int i) {
 		// Converts Decimal to Hexadecimal format
@@ -670,7 +822,8 @@ public class Assembler {
 				bin.append("0");
 			}
 			bin.append(hexToBin(splitted[1]));
-		} else if (operation.equals("SIR")) {// CHECK
+		} 
+		else if (operation.equals("SIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
 			for(int i=0;i<5-(hexToBin(splitted[1])).length();i++) {
@@ -721,6 +874,61 @@ public class Assembler {
 		}else if(operation.equals("OUT")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append("00000000");
+		}
+		else if (operation.equals("FADD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("FSUB")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("CNVRT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("LDFR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("STFR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		}
 		return bin.toString();
 	}
