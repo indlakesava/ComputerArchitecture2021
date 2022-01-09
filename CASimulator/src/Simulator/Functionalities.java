@@ -8,7 +8,8 @@ package Simulator;
  *
  * @author indla
  */
-public class Functionalities {  
+public class Functionalities { 
+    //Setting memory after reading the ipl.txt file
     public void set_memory(String ipl_txt)
     {
         //Reads ipl_txt data passed and loads the memoy
