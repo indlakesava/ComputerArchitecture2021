@@ -5,12 +5,18 @@
 package Simulator;
 
 import java.math.BigInteger;
+import java.util.BitSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+
 
 /**
  *
  * @author indla
  */
 public class Assembler {
+        //Encoding the Opcodes to 6 bits.
 	private String encodeOpcode(String s) {
 		// Encodes the instruction in the opcode
 		String encoded_opcode = "";
@@ -66,13 +72,70 @@ public class Assembler {
 		case "SIR":
 			encoded_opcode = "000111";
 			break;
+		case "MLT":
+			encoded_opcode = "010100"; // 20
+			break;
+		case "DVD":
+			encoded_opcode = "010101"; // 21
+			break;
+		case "TRR":
+			encoded_opcode = "010110"; // 22
+			break;
+		case "AND":
+			encoded_opcode = "010111"; // 23
+			break;
+		case "ORR":
+			encoded_opcode = "011000"; // 24
+			break;
+		case "NOT":
+			encoded_opcode = "011001"; // 25
+			break;
+		case "SRC":
+			encoded_opcode = "011111"; // 31
+			break;
+		case "RRC":
+			encoded_opcode = "100000"; // 32
+			break;
+        case "TRAP":
+			encoded_opcode = "100100"; // 36
+			break;
+		case "IN":
+			encoded_opcode = "111101"; // 61
+			break;
+		case "OUT":
+			encoded_opcode = "111110"; // 62
+			break;
+		case "FADD":
+			encoded_opcode = "100001"; // 33
+			break;
+		case "FSUB":
+			encoded_opcode = "100010"; // 34
+			break;
+		case "CNVRT":
+			encoded_opcode = "100101"; // 37
+			break;
+		case "LDFR":
+			encoded_opcode = "110010"; // 50
+			break;
+		case "STFR":
+			encoded_opcode = "110011"; // 51
+			break;
+		case "VADD":
+			encoded_opcode = "100110"; // 38
+			break;
+		case "VSUB":
+			encoded_opcode = "100111"; // 39
+			break;
+
 		default:
+                        Simulator.MFR = "0100";
 			System.out.println("Invalid Instruction");
 		}
 		return encoded_opcode;
 	}
 
-	public String decodeOpcode(String s) {
+        //decoding the Opcodes.
+        public String decodeOpcode(String s) {
 		// Decodes opcode to instruction
 		String decoded_opcode = "";
 		switch (s) {
@@ -127,12 +190,66 @@ public class Assembler {
 		case "000111":
 			decoded_opcode = "SIR";
 			break;
+		case "010100": // 20
+			decoded_opcode = "MLT";
+			break;
+		case "010101": // 21
+			decoded_opcode = "DVD";
+			break;
+		case "010110": // 22
+			decoded_opcode = "TRR";
+			break;
+		case "010111": // 23
+			decoded_opcode = "AND";
+			break;
+		case "011000": // 24
+			decoded_opcode = "ORR";
+			break;
+		case "011001": // 25
+			decoded_opcode = "NOT";
+			break;
+		case "011111": // 31
+			decoded_opcode = "SRC";
+			break;
+		case "100000": // 32
+			decoded_opcode = "RRC";
+			break;
+		case "100100": // 36
+			decoded_opcode = "TRAP"; 
+			break;
+		case "111101": // 61
+			decoded_opcode = "IN";
+			break;
+		case "111110": // 62
+			decoded_opcode = "OUT";
+			break;
+		case "100001": //33
+			decoded_opcode = "FADD";
+			break;
+		case "100010"://34
+			decoded_opcode = "FSUB";
+			break;
+		case "100101"://37
+			decoded_opcode = "CNVRT";
+			break;
+		case "110010"://50
+			decoded_opcode = "LDFR";
+			break;
+		case "110011"://51
+			decoded_opcode = "STFR";
+		case "100110": // 38
+			decoded_opcode = "VADD";
+			break;
+		case "100111": // 39
+			decoded_opcode = "VSUB";
+			break;
 		default:
 			System.out.println("Invalid code");
 		}
 		return decoded_opcode;
 	}
 
+        //Convert Hexadecimal to Binary of 16 bits
 	public String hexToBin16(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Also appends zeroes to make it 16 bit
@@ -153,7 +270,134 @@ public class Assembler {
 
 		return sb.toString();
 	}
+	
+	
+	//convert floating point to binary16 bit
+//	 public static final int FLOATING_POINT_BIT =16;
+	    public static final int EXPONENT_BIT =7;
+//	    public static final int MANTISSA_BIT =8;
+	    public static final int bias = (int)Math.pow(2,EXPONENT_BIT-1)-1;
+	public String floatTo16bitString(float value){
+		 StringBuilder ValueString32 = new StringBuilder(32);
+	        StringBuilder ValueString16 = new StringBuilder(16);
 
+	        int intBits = Float.floatToIntBits(value);
+	        ValueString32.append(Integer.toBinaryString(intBits));
+	        while(ValueString32.length()<32){
+	            ValueString32.insert(0,"0");
+	        }
+	        String FloatString = ValueString32.toString();
+
+	        ValueString16.append(FloatString.charAt(0));
+
+	        if(isAllZero(FloatString.substring(1,9))){
+	            ValueString16.append("0000000");
+	        }
+	        else if(isAllOne(FloatString.substring(1,9))){
+	            ValueString16.append("1111111");
+	        }
+	        else{
+	        int exponent = Integer.valueOf(FloatString.substring(1,9),2)-127;
+	        ValueString16.append(toBinaryString(exponent+bias,EXPONENT_BIT));
+	        }
+
+	        ValueString16.append(FloatString.substring(9,17));
+
+
+	        return ValueString16.toString();
+	}
+
+    /**
+     * Converts an integer to a binary string, and 0 pads up to the number
+     * of bits. For instance, calling toBinaryString(3, 6) will return 000011.
+     *
+     * @param value        A decimal number
+     * @param numberOfBits The bit of binary number
+     * @return The binary string representation
+     */
+    public static String toBinaryString(int value, int numberOfBits) {
+        BitSet bits = convert(value);
+        return toBinaryString(bits, numberOfBits);
+    }
+	 /**
+     * Convert an integer to a BitSet(16bits)
+     * Use complement code to show binary number
+     *
+     * @param value The integer to utils
+     * @return The converted BitSet
+     * @throws NumberFormatException we have 16 bits word, so the range is [-32768,32767],
+     *                      numbers that not in the range will throw NumberFormatException Exception
+     */
+    public static BitSet convert(int value) throws NumberFormatException {
+        if (value >= 0) {
+            //handle positive number
+            return BitSet.valueOf(new long[]{value});
+        } else if (value < 0) {
+            //handle negative number
+            BitSet bits;
+            value =  1 + value;
+            bits = BitSet.valueOf(new long[]{value});
+            bits.set(15);
+            return bits;
+        } else {
+            //we have 16 bits word, so the range is from -32768-32767
+            String mess = String.format("Value: %d is out of range", value);
+            throw new NumberFormatException(mess);
+        }
+    }
+    
+    /**
+     * Converts a bitset to a binary string representation using little endian.
+     * The size of the string returned varies on the size of the BitSet, therefore
+     * a bit set with the value of 7, and a max of 4 bits will return "0111".
+     *
+     * @param bits The BitSet to convert
+     * @return The binary string representation
+     */
+    public static String toBinaryString(BitSet bits, int numberOfBits) {
+        if (bits.isEmpty()) {
+            char[] empties = new char[numberOfBits];
+            return new String(empties).replace("\0", "0");
+        }
+        StringBuilder builder = new StringBuilder(numberOfBits);
+        IntStream.range(0, numberOfBits).mapToObj(i -> bits.get(i) ? '1' : '0').forEach(builder::append);
+        return builder.reverse().toString();
+    }
+	
+    private static boolean isAllZero(String s){
+        Pattern pattern = Pattern.compile("0*");
+        return pattern.matcher(s).matches();
+    }
+
+    private static boolean isAllOne(String s){
+        Pattern pattern = Pattern.compile("1*");
+        return pattern.matcher(s).matches();
+    }
+	
+
+        //Convert Hexadecimal to Binary of 5 bits
+	public String hexToBin5(String s) {
+		// Converts Hexadecimal value to Binary format
+		// Also appends zeroes to make it 5 bit
+		if (s == null) {
+			return "00000";
+		}
+
+		String bin = new BigInteger(s, 5).toString(2);
+		if (bin.length() == 5) {
+			return bin;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 5 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+
+		return sb.toString();
+	}
+
+        //Convert Binary to Hexadecimal
 	public String binToHex(String s) {
 		// Converts Binary value to Hexadecimal format
 		int decimal = Integer.parseInt(s, 2);
@@ -163,6 +407,7 @@ public class Assembler {
 		return hexStr;
 	}
 
+        //Convert Hexadecimal to Binary
 	public String hexToBin(String s) {
 		// Converts Hexadecimal value to Binary format
 		// Doen't append zeroes to make it 16 bit. Returns as it is.
@@ -172,26 +417,77 @@ public class Assembler {
 		return new BigInteger(s, 16).toString(2);
 	}
 
+        //Convert Hexadecimal to decimal
 	public int hexToDec(String s) {
 		// Converts Hexadecimal value to decimal format
 		return Integer.parseInt(s, 16);
 	}
 
+    //Convert hex to Float
+public float hexToFloat(String s) {
+	// Converts hex value to Float format
+	
+	Long i = Long.parseLong(s, 16);
+    return Float.intBitsToFloat(i.intValue());
+}
+
+//Convert Float to Hexadecimal
+public String floatToHex(float f) {
+return Integer.toHexString(Float.floatToIntBits(f));
+}
+	
+        //Convert Decimal to Hexadecimal
 	public String decToHex(int i) {
 		// Converts Decimal to Hexadecimal format
 		return Integer.toHexString(i);
 	}
 
+        //Convert Binary to Decimal
 	public int binToDec(String s) {
 		// Converts Binary value to Decimal format
 		return Integer.parseInt(s, 2);
 	}
 
+        //Convert Decimal to Binary 
 	public String decToBin(int i) {
 		// Converts Decimal value to Binary format
 		return Integer.toString(i, 2);
 	}
+        
+        //Convert Decimal to Binary of 16 bits
+        public String decToBin16(int i) {
+		// Converts decimal value to Binary format
+		// Also appends zeroes to make it 16 bit
+		i = Math.abs(i); 
+		String bin = Integer.toString(i, 2);
+		if (bin.length() == 16) {
+			return bin;
+		}
 
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 16 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+
+		return sb.toString();
+	}
+
+        //Convert Decimal to Binary of 32 bits
+	public String decToBin32(int i) {
+		String bin = Integer.toString(i, 2);
+		if (bin.length() == 32) {
+			return bin;
+		}
+		StringBuilder sb = new StringBuilder();
+		while (sb.length() < 32 - bin.length()) {
+			sb.append('0');
+		}
+		sb.append(bin);
+		return sb.toString();
+	}
+
+        //Encoding the Instruction
 	public String instructionToWord(String op, String rem) {
 		// Encodes instruction to word(2 bytes) data
 		String instructionWord = "";
@@ -200,6 +496,7 @@ public class Assembler {
 		return binToHex(opcode + R_IX_I_Add);
 	}
 
+        //Encoding the register
 	private String encode_reg(String s_reg) {
 		int reg = Integer.parseInt(s_reg);
 		if (reg == 0) {
@@ -215,22 +512,96 @@ public class Assembler {
 			return "";
 		}
 	}
-	private String encode_cc(String s_cc) {
-		int cc = Integer.parseInt(s_cc);
-		if (cc == 0) {
+        
+        //Encoding the trap register
+	private String encode_trp(String s_trp) {
+		int trp = Integer.parseInt(s_trp);
+		if (trp == 0) {
 			return "00";
-		} else if (cc == 1) {
+		} else if (trp == 1) {
 			return "01";
-		} else if (cc == 2) {
+		} else if (trp == 2) {
 			return "10";
-		} else if (cc == 3) {
-			return "11";
 		} else {
-			Simulator.error = "Invalid Condition Code";
+                        Simulator.MFR = "0010";
+			Simulator.error = "Invalid Register";
 			return "";
 		}
 	}
 
+        //Decoding the register
+	public String get_reg_val(String bin_reg) {
+
+		if (bin_reg.equals("00")) {
+			return Simulator.R0;
+		} else if (bin_reg.equals("10")) {
+			return Simulator.R2;
+		} else if (bin_reg.equals("01")) {
+			return Simulator.R1;
+		} else if (bin_reg.equals("11")){
+			return Simulator.R3;
+		} else {
+			return "";
+		}
+
+	}
+
+        //Setting register value after multiplication
+	public void set_reg_val_MLT(String bin_reg, int result) {
+		int reg = Integer.parseInt(bin_reg, 2);
+		int overflow = 0;
+		String bin_result = "";
+		if (result > 65535) {
+			Simulator.CC = "1" + Simulator.CC.substring(1);
+			overflow = 1;
+		} else {
+			Simulator.CC = "0" + Simulator.CC.substring(1);
+		}
+		if (reg == 0) {
+			bin_result = decToBin32(result);
+			Simulator.R0 = bin_result.substring(0, 16);
+			Simulator.R1 = bin_result.substring(16, 32);
+
+		} else if (reg == 2) {
+			bin_result = decToBin32(result);
+			Simulator.R2 = bin_result.substring(0, 16);
+			Simulator.R3 = bin_result.substring(16, 32);
+		}
+	}
+
+        //Setting register value after division
+	public void set_reg_val_DVD(String bin_reg, int rx, int ry) {
+		int reg = Integer.parseInt(bin_reg, 2);
+		int DIVZERO = 0;
+		if (ry == 0) {
+			DIVZERO = 1;
+			Simulator.CC = Simulator.CC.substring(0,2) + "1" + Simulator.CC.substring(3);
+		}else {
+			Simulator.CC = Simulator.CC.substring(0, 2) + "0" + Simulator.CC.substring(3);
+			if (reg == 0) {
+				Simulator.R0 = decToBin16(rx / ry);
+				Simulator.R1 = decToBin16(rx % ry);
+			} else if (reg == 2) {
+				Simulator.R2 = decToBin16(rx / ry);
+				Simulator.R3 = decToBin16(rx % ry);
+			}
+		}
+	}
+
+        //Setting register value
+	public void output_to_reg(String reg, String result) {
+		if (reg.equals("00")) {
+			Simulator.R0 = result;
+		} else if (reg.equals("01")) {
+			Simulator.R1 = result;
+		} else if (reg.equals("10")) {
+			Simulator.R2 = result;
+		} else if (reg.equals("11")) {
+			Simulator.R3 = result;
+		}
+	}
+
+        //Encoding Index registers
 	private String encode_ix(String s_ix) {
 		int ix = Integer.parseInt(s_ix);
 		if (ix == 0) {
@@ -247,6 +618,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding Inidrect addressing
 	private String encode_i(String s_I) {
 		int I = Integer.parseInt(s_I);
 		if (I == 0) {
@@ -259,6 +631,7 @@ public class Assembler {
 		}
 	}
 
+        //Encoding the address
 	private String encode_address(String add) {
 		String add_bin = hexToBin(add);
 		if (add_bin.length() == 5) {
@@ -276,6 +649,34 @@ public class Assembler {
 		}
 	}
 
+        //Encoding the Count value
+	private String encode_count(String count) {
+		String Count = decToBin(Integer.parseInt(count));
+		switch (Count.length()){
+			case 1:
+				return "000" + Count;
+			case 2:
+				return "00" + Count;
+			case 3:
+				return "0" + Count;
+			default:
+				return Count;
+		}
+	}
+
+        //Encoding the AL value
+	private String encode_AL(String AL) {
+		String al = decToBin(Integer.parseInt(AL));
+		return al;
+	}
+
+        //Encoding the LR value
+	private String encode_LR(String LR) {
+		String lr = decToBin(Integer.parseInt(LR));
+		return lr;
+	}
+
+        //Encoding the Register, Index register, Immediate register, and address
 	private String encode_R_IX_I_Add(String s, String operation) {
 		// Encodes General Purpose Register, Index register, Indirect addressing,
 		// Addressing to bits
@@ -285,98 +686,283 @@ public class Assembler {
 		if (operation.equals("LDR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("LDA")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("LDX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
 		} else if (operation.equals("STR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		} else if (operation.equals("STX")) {
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("JZ")) {
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("JZ")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JNE")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JNE")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JCC")) {
-			bin.append(encode_cc(splitted[0]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JCC")) {
+			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JMA")) {//CHECK
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JMA")) {// CHECK
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("JSR")) {//CHECK
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("JSR")) {// CHECK
 			bin.append("00");
 			bin.append(encode_ix(splitted[0]));
-			bin.append(encode_i(splitted[1]));
-			bin.append(encode_address(splitted[2]));
-		}
-		else if (operation.equals("RFS")) {//CHECK
-			bin.append("00000");
+			if (splitted.length == 3) {
+				bin.append(encode_i(splitted[1]));
+				bin.append(encode_address(splitted[2]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[1]));
+			}
+		} else if (operation.equals("RFS")) {// CHECK
+			for(int i=0;i<10-(hexToBin(splitted[0])).length();i++) {
+				bin.append("0");
+			}
 			bin.append(hexToBin(splitted[0]));
-		}
-		else if (operation.equals("SOB")) {
+		} else if (operation.equals("SOB")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("JGE")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("JGE")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("AMR")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("AMR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[3]));
-		}
-		else if (operation.equals("SMR")) {
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("SMR")) {
 			bin.append(encode_reg(splitted[0]));
 			bin.append(encode_ix(splitted[1]));
-			bin.append(encode_i(splitted[2]));
-			bin.append(encode_address(splitted[1]));
-		}
-		else if (operation.equals("AIR")) {//CHECK
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		} else if (operation.equals("AIR")) {// CHECK
+			bin.append(encode_reg(splitted[0]));	
+			bin.append("000");
+			for(int i=0;i<5-(hexToBin(splitted[1])).length();i++) {
+				bin.append("0");
+			}
+			bin.append(hexToBin(splitted[1]));
+		} 
+		else if (operation.equals("SIR")) {// CHECK
 			bin.append(encode_reg(splitted[0]));
 			bin.append("000");
+			for(int i=0;i<5-(hexToBin(splitted[1])).length();i++) {
+				bin.append("0");
+			}
 			bin.append(hexToBin(splitted[1]));
-		}
-		else if (operation.equals("SIR")) {//CHECK
+		}else if(operation.equals("MLT")) {
 			bin.append(encode_reg(splitted[0]));
-			bin.append("000");
-			bin.append(hexToBin(splitted[1]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("DVD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("TRR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("AND")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("ORR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_reg(splitted[1]));
+			bin.append("000000");
+		}else if(operation.equals("NOT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+		}else if(operation.equals("SRC")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_AL(splitted[3]));
+			bin.append(encode_LR(splitted[2]));
+			bin.append("00");
+			bin.append(encode_count(splitted[1]));
+		}else if(operation.equals("RRC")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(splitted[3]);
+			bin.append(splitted[2]);
+			bin.append("00");
+			bin.append(encode_count(splitted[1]));
+		}else if(operation.equals("TRAP")) {
+			bin.append(encode_trp(splitted[0]));
+			bin.append("00000000");
+                }else if(operation.equals("IN")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+		}else if(operation.equals("OUT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append("00000000");
+		}else if(operation.equals("VADD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}else if(operation.equals("VSUB")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
 		}
-
+		else if (operation.equals("FADD")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("FSUB")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("CNVRT")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("LDFR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
+		else if (operation.equals("STFR")) {
+			bin.append(encode_reg(splitted[0]));
+			bin.append(encode_ix(splitted[1]));
+			if (splitted.length == 4) {
+				bin.append(encode_i(splitted[2]));
+				bin.append(encode_address(splitted[3]));
+			} else {
+				bin.append("0");
+				bin.append(encode_address(splitted[2]));
+			}
+		}
 		return bin.toString();
 	}
 
@@ -396,6 +982,7 @@ public class Assembler {
 
 	public String EffectiveAddress(String s) {
 		// Method calculates effective address
+                Cache cache_obj = new Cache();
 		int IX = Integer.parseInt(s.substring(0, 2), 2);
 		int I = Integer.parseInt(s.substring(2, 3), 2);
 		int Add = Integer.parseInt(s.substring(3, 8), 2);
@@ -421,10 +1008,10 @@ public class Assembler {
 		} else if (I == 1) {
 			if (IX == 0) {
 				// indirect addressing, but NO indexing
-				EA = Simulator.memory[Add];
+				EA = cache_obj.get_memory(Add);
 			} else {
 				// both indirect addressing and indexing
-				EA = Simulator.memory[hexToDec(addHex(decToHex(Add), binToHex(IX_Val)))];
+				EA = cache_obj.get_memory(hexToDec(addHex(decToHex(Add), binToHex(IX_Val))));
 			}
 		}
 		return EA;
